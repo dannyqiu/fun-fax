@@ -4,3 +4,8 @@ migrations
 vagrant/.vagrant
 vagrant/site.retry
 vagrant/a4keypair.pem
+
+app/static/css
+app/static/js
+app/static/media
+app/templates/index.html

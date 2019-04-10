@@ -5,7 +5,7 @@ from app.irsystem.models.helpers import NumpyEncoder as NumpyEncoder
 project_name = "Fun Fax"
 net_id = "Arshi Bhatnagar (ab2248), Danny Qiu (dq29), Rebecca Jiang (rwj52), Nehal Rawat (nr338), Ryan Davila (rmd252)"
 
-@irsystem.route('/', methods=['GET'])
+@irsystem.route('/search', methods=['GET'])
 def search():
 	query = request.args.get('search')
 	if not query:
@@ -17,4 +17,6 @@ def search():
 	return render_template('search.html', name=project_name, netid=net_id, output_message=output_message, data=data)
 
 
-
+@irsystem.route('/', methods=['GET'])
+def index():
+    return render_template('index.html')
