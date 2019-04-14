@@ -1,13 +1,82 @@
-.ipynb_checkpoints
-
-venv
-*.pyc
-migrations 
+migrations
 vagrant/.vagrant
 vagrant/site.retry
 vagrant/a4keypair.pem
 
+# Data files
+*.csv
+
+# React files
 app/static/css
 app/static/js
 app/static/media
+app/static/favicon.ico
+app/static/manifest.json
 app/templates/index.html
+
+# Text Backup Files #
+*.sw[a-z]
+*~
+\#*\#
+.\#*
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.iml
+
+# OS X Files #
+.DS_Store
+._*
+.Spotlight*
+.Trashes
+
+# Windows Files #
+Thumbs.db
+ehthumbs.db#
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
