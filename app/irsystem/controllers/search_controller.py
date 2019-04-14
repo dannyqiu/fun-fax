@@ -1,22 +1,38 @@
-from . import *  
+from . import *
 from app.irsystem.models.helpers import *
 from app.irsystem.models.helpers import NumpyEncoder as NumpyEncoder
 
-project_name = "Fun Fax"
-net_id = "Arshi Bhatnagar (ab2248), Danny Qiu (dq29), Rebecca Jiang (rwj52), Nehal Rawat (nr338), Ryan Davila (rmd252)"
-
 @irsystem.route('/search', methods=['GET'])
 def search():
-	query = request.args.get('search')
-	if not query:
-		data = []
-		output_message = ''
-	else:
-		output_message = "Your search: " + query
-		data = range(5)
-	return render_template('search.html', name=project_name, netid=net_id, output_message=output_message, data=data)
-
-
-@irsystem.route('/', methods=['GET'])
-def index():
-    return render_template('index.html')
+    query = request.args.get('q')
+    data = [
+        {
+            "type": "submission",
+            "title": "Fun fact about the Vatican",
+            "subreddit": "funny",
+            "permalink": "https://reddit.com/r/funny/comments/16z5sr/fun_fact_about_the_vatican/",
+            "score": 0.999,
+        },
+        {
+            "type": "submission",
+            "title": "TIL Corey Feldman already made a movie about killing Bin Laden",
+            "subreddit": "todayilearned",
+            "permalink": "https://reddit.com/r/todayilearned/comments/h2l9w/til_corey_feldman_already_made_a_movie_about/",
+            "score": 0.459,
+        },
+        {
+            "type": "comment",
+            "title": "Shaq hit almost 12,000 baskets in his career. Exactly 1 of them was a 3-pointer.",
+            "subreddit": "askreddit",
+            "permalink": "https://www.reddit.com/r/AskReddit/comments/4lmm61/what_is_a_fun_fact_that_always_blows_peoples_minds/d3os740/",
+            "score": 0.589,
+        },
+        {
+            "type": "submission",
+            "title": "YSK Useful Tips For A Rainy Day",
+            "subreddit": "YouShouldKnow",
+            "permalink": "https://reddit.com/r/YouShouldKnow/comments/16zf8g/ysk_useful_tips_for_a_rainy_day/",
+            "score": 0.123,
+        },
+    ]
+    return http_resource(data, "results", True)

@@ -10,6 +10,8 @@ vagrant/a4keypair.pem
 app/static/css
 app/static/js
 app/static/media
+app/static/favicon.ico
+app/static/manifest.json
 app/templates/index.html
 
 # Text Backup Files #
