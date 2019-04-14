@@ -1,5 +1,6 @@
 {
   "name": "frontend",
+  "homepage": "/",
   "proxy": "http://localhost:5000",
   "version": "0.1.0",
   "private": true,
@@ -13,7 +14,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "copy": "cp -r build/index.html ../app/templates/ && cp -R build/static/ ../app/static/"
+    "copy": "cp -r build/static/* ../app/static/ && cp build/favicon.ico ../app/static/ && cp build/manifest.json ../app/static/ && cp build/index.html ../app/templates/index.html"
   },
   "eslintConfig": {
     "extends": "react-app"
