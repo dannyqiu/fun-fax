@@ -4,6 +4,7 @@ vagrant/site.retry
 vagrant/a4keypair.pem
 
 # Data files
+/data/
 *.csv
 
 # React files
