@@ -10,8 +10,8 @@
     LANG: en_US.UTF-8
     LANGUAGE: en_US.UTF-8
   vars:
-      repository_url: https://github.com/CornellNLP/CS4300_Flask_template.git
-      repository_path: /home/vagrant/CS4300_Flask_template
+      repository_url: https://github.com/dannyqiu/fun-fax.git
+      repository_path: /home/vagrant/fun-fax
       dbname: mydb
       dbuser: myapp
       dbpassword: password
@@ -24,7 +24,6 @@
         - gfortran
         - g++
         - build-essential
-        - libssl-dev
         - libffi-dev
         - postgresql
         - libpq-dev
@@ -32,6 +31,8 @@
         - python3-dev
         - python3-pip
         - nginx
+        - nodejs-dev
+        - npm
     - name: Run echo
       command: echo $APP_SETTINGS; echo $DATABASE_URL
     - name: Check if directory exists

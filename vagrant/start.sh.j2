@@ -2,6 +2,13 @@
 
 cd "{{ repository_path }}"
 
+(
+    cd frontend
+    npm install
+    npm run build
+    npm run copy
+)
+
 exec gunicorn app:app \
     --bind=unix:/tmp/cs.sock \
     --workers 3 \
