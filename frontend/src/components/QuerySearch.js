@@ -5,7 +5,8 @@ class QuerySearch extends React.Component {
     super(props);
     this.state = {
       query: '',
-      results: []
+      results: [],
+      failedQuery: null,
       };
   
     this.handleChange = this.handleChange.bind(this);
@@ -13,7 +14,7 @@ class QuerySearch extends React.Component {
   }
 
   componentDidMount() {
-    document.title = "Fun Fax: Fact Generator";
+
   }
 
   handleChange(event) {
@@ -35,18 +36,57 @@ class QuerySearch extends React.Component {
   })
     .then(response => response.json())
     .then(data => {
-      this.setState( {
-        "results": data.data.results
-      });
+      let results = data.data.results
+      if (results.length === 0) {
+        this.setState( {
+          "results": [],
+          failedQuery: this.state.query,
+        });
+      }
+      else {
+        this.setState( {
+          "results": results,
+          "failedQuery": null,
+        })
+      }
+      console.log(results);
     });
 
   queryRender() {
-    if (this.state.query) {
+    if (this.state.query && this.state.results) {
       return (
         <p>Query: {this.state.query}</p>
       )
     }
   }
+    // else if (this.state.query && this.state.results === ['failed']) {
+    //   return (
+    //     <p>Query: {this.state.query} returned 0 results.</p> 
+    //   )
+    // }
+    // else {
+    //   return (
+    //     <p>Query: {this.state.query}</p>
+    //   )
+    // }
+  // }
+
+  resultsRender() {
+    console.log(this.state.success)
+    if (this.state.failedQuery) {
+      return (
+      <p>{"'"+this.state.failedQuery+"' returned 0 results. Please specify a different query."}</p>
+      )
+    }
+    else {
+      return (
+    <p>{this.state.results.map(result => (
+      <div className="fact"> <a href={"https://reddit.com/"+result.permalink}>{result.title} </a> <br></br>{"Score: "+result.score+" upvotes | "} Subreddit: r/{result.subreddit}</div>
+    ))}</p>
+      )
+  }
+}
+
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
@@ -55,14 +95,12 @@ class QuerySearch extends React.Component {
           <input type="text" placeholder="Search for..." value={this.state.value} onChange={this.handleChange} />
         </label><br></br>
         <input type="submit" value="Search!" /> <input type="submit" disabled={true} onClick={this.randomSearch} value="Random?" />
-      
         {this.queryRender()}
-        {this.state.results.map(result => (
-      <div className="fact"> <a href={"https://reddit.com/"+result.permalink}>{result.title} </a> <br></br>{"Score: "+result.score+" upvotes | "} Subreddit: r/{result.subreddit}</div>
-    ))}
+        {this.resultsRender()}
+
         </form>
     );
-  }
+ }
 }
 
 export default QuerySearch;
