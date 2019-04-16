@@ -38,12 +38,10 @@ class InvertedIndex:
         """
         Add a document string to the index
         """
-        for token in [t.lower() for t in nltk.word_tokenize(document)]:
-            if token in self.stopwords:
-                continue
-
+        tokens = [t.lower() for t in self.tokenizer(document)]
+        tokens = set(tokens).difference(self.stopwords)
+        for token in tokens:
             if self.stemmer:
                 token = self.stemmer.stem(token)
 
-            if uuid not in self.index[token]:
-                self.index[token].append(uuid)
+            self.index[token].append(uuid)

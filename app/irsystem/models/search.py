@@ -1,4 +1,5 @@
 import os
+import re
 import spacy
 import pandas as pd
 from typing import Set
@@ -12,20 +13,26 @@ DATA_DIR = os.path.abspath(os.path.join(app.instance_path, "..", "data"))
 class BooleanSearch:
 
     def __init__(self):
+        print("Loading thesaurus")
         self.thesaurus = Thesaurus()
-        self.inv_idx = InvertedIndex()
+        regex = re.compile("[a-zA-Z]+")
+        self.inv_idx = InvertedIndex(tokenizer=lambda d: regex.findall(d), stemmer=None, stopwords=[])
         self.index = {}
 
+        print("Loading fun fact csv")
         fun_fact_title_data = pd.read_csv(os.path.join(DATA_DIR, "fun_fact_title.csv"))
         # til_title_data = pd.read_csv(os.path.join(DATA_DIR, "til_title.csv"))
         # ysk_title_data = pd.read_csv(os.path.join(DATA_DIR, "ysk_title.csv"))
 
-        for _, row in fun_fact_title_data.iterrows():
-            self.inv_idx.add(row['id'], row['title'])
-            self.index[row['id']] = row
+        print("Adding to index")
+        for row in fun_fact_title_data.itertuples():
+            self.inv_idx.add(row.id, row.title)
+            self.index[row.id] = row
+
+        print("Done")
 
     def _rank_results(self, doc_nums, top=10):
-        ranked = sorted(doc_nums, key=lambda d: self.index[d]['score'], reverse=True)
+        ranked = sorted(doc_nums, key=lambda d: self.index[d].score, reverse=True)
         return ranked[:top]
 
     def _boolean_search_with_synonyms(self, query_terms) -> Set[int]:
@@ -62,10 +69,10 @@ class BooleanSearch:
         results = [
             {
                 "type": "submission",
-                "title": self.index[d]['title'],
-                "subreddit": self.index[d]['subreddit'],
-                "permalink": self.index[d]['permalink'],
-                "score": self.index[d]['score'],
+                "title": self.index[d].title,
+                "subreddit": self.index[d].subreddit,
+                "permalink": self.index[d].permalink,
+                "score": self.index[d].score,
             }
             for d in rel
         ]
