@@ -11,6 +11,9 @@ class Thesaurus:
 
     def most_similar(self, word, top=10):
         word_vector = self.nlp.vocab[word].vector
+        # word does not appear in our vocabulary, doesn't make sense to give any similar words
+        if not np.any(word_vector):
+            return [word]
         sim = np.inner(word_vector, self.vocab_vectors)
         by_similarity = [self.vocab[i] for i in np.argsort(-sim)]
         top_similar = by_similarity[:top]
