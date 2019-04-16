@@ -40,11 +40,11 @@ class BooleanSearch:
         doc_nums = None
         for word in query_terms:
             synonyms = self.thesaurus.most_similar(word)
-            synonyms = list(filter(lambda w: w != word, synonyms))
+            #synonyms = list(filter(lambda w: w != word, synonyms))
             syn_docs = set()
             for syn in synonyms:
                 docs = self.inv_idx.lookup(syn)
-                syn_docs.union(docs)
+                syn_docs = syn_docs.union(docs)
             if doc_nums is None:
                 doc_nums = syn_docs
             else:
