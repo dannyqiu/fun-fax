@@ -64,9 +64,12 @@ class BooleanSearch:
     def search(self, query, top=10):
         query_terms = query.lower().split()[:MAX_SEARCH_TERMS]
         doc_nums = self._boolean_search(query_terms)
-        if len(doc_nums) < top:
-            doc_nums = doc_nums.union(self._boolean_search_with_synonyms(query_terms))
         rel = self._rank_results(doc_nums)[:top]
+        if len(doc_nums) < top:
+            syn_doc_nums = self._boolean_search_with_synonyms(query_terms)
+            syn_doc_nums = syn_doc_nums.difference(doc_nums)
+            syn_rel = self._rank_results(syn_doc_nums)[:top - len(doc_nums)]
+            rel += syn_rel
         results = [
             {
                 "type": "submission",
