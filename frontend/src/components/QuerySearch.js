@@ -38,7 +38,6 @@ class QuerySearch extends React.Component {
       this.setState( {
         "results": data.data.results
       });
-      console.log(data);
     });
 
   queryRender() {
