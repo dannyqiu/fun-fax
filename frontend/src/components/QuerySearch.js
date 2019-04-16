@@ -12,12 +12,15 @@ class QuerySearch extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentDidMount() {
+    document.title = "Fun Fax: Fact Generator";
+  }
+
   handleChange(event) {
       this.setState({query: event.target.value});
     }
   
   handleSubmit(event) {
-    alert('A query was submitted: ' + this.state.query);
     this.getInfo()
     event.preventDefault();
   }
@@ -35,6 +38,7 @@ class QuerySearch extends React.Component {
       this.setState( {
         "results": data.data.results
       });
+      console.log(data);
     });
 
   queryRender() {
@@ -55,7 +59,7 @@ class QuerySearch extends React.Component {
       
         {this.queryRender()}
         {this.state.results.map(result => (
-      <div className="fact"> <a href={result.permalink}>{result.title} </a> <br></br>{result.score} Subreddit: r/{result.subreddit}</div>
+      <div className="fact"> <a href={"https://reddit.com/"+result.permalink}>{result.title} </a> <br></br>{"Score: "+result.score+" upvotes | "} Subreddit: r/{result.subreddit}</div>
     ))}
         </form>
     );
