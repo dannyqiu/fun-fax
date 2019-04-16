@@ -9,6 +9,7 @@ from .inverted_index import InvertedIndex
 from .thesaurus import Thesaurus
 
 DATA_DIR = os.path.abspath(os.path.join(app.instance_path, "..", "data"))
+MAX_SEARCH_TERMS = 8
 
 class BooleanSearch:
 
@@ -61,7 +62,7 @@ class BooleanSearch:
         return doc_nums
 
     def search(self, query, top=10):
-        query_terms = query.lower().split()
+        query_terms = query.lower().split()[:MAX_SEARCH_TERMS]
         doc_nums = self._boolean_search(query_terms)
         if len(doc_nums) < top:
             doc_nums = doc_nums.union(self._boolean_search_with_synonyms(query_terms))
