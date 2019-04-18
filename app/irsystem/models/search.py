@@ -11,6 +11,12 @@ from .thesaurus import Thesaurus
 DATA_DIR = os.path.abspath(os.path.join(app.instance_path, "..", "data"))
 MAX_SEARCH_TERMS = 8
 
+required_columns = [
+    "title",
+    "subreddit",
+    "permalink",
+]
+
 class BooleanSearch:
 
     def __init__(self):
@@ -21,7 +27,7 @@ class BooleanSearch:
         self.index = {}
 
         print("Loading fun fact csv")
-        fun_fact_title_data = pd.read_csv(os.path.join(DATA_DIR, "fun_fact_title.csv"))
+        fun_fact_title_data = pd.read_csv(os.path.join(DATA_DIR, "fun_fact_title.csv")).dropna(subset=required_columns)
         # til_title_data = pd.read_csv(os.path.join(DATA_DIR, "til_title.csv"))
         # ysk_title_data = pd.read_csv(os.path.join(DATA_DIR, "ysk_title.csv"))
 
@@ -30,7 +36,7 @@ class BooleanSearch:
             self.inv_idx.add(row.id, row.title)
             self.index[row.id] = row
 
-        print("Done")
+        print("Done loading {} rows".format(len(fun_fact_title_data.index)))
 
     def _rank_results(self, doc_nums, top=10):
         ranked = sorted(doc_nums, key=lambda d: self.index[d].score, reverse=True)
