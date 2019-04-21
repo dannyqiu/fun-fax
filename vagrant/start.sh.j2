@@ -1,0 +1,20 @@
+#!/bin/sh
+
+cd "{{ repository_path }}"
+
+(
+    cd frontend
+    npm install
+    npm run build
+    npm run copy
+)
+
+exec gunicorn app:app \
+    --bind=unix:/tmp/cs.sock \
+    --workers 2 \
+    --timeout=240 \
+    --user=root \
+    --log-level=info \
+    --access-logfile '-' \
+    -e DATABASE_URL=postgresql://localhost/my_app_db \
+    -e APP_SETTINGS=config.ProductionConfig

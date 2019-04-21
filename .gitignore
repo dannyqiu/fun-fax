@@ -4,12 +4,16 @@ vagrant/site.retry
 vagrant/a4keypair.pem
 
 # Data files
+/data/
 *.csv
+/*.json
 
 # React files
 app/static/css
 app/static/js
 app/static/media
+app/static/favicon.ico
+app/static/manifest.json
 app/templates/index.html
 
 # Text Backup Files #
