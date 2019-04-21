@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
+const URL = "localhost:3000/"
+const API = "/api/irsystem/search?q="
 
 class QuerySearch extends React.Component {
   constructor(props) {
@@ -13,10 +15,6 @@ class QuerySearch extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentDidMount() {
-
-  }
-
   handleChange(event) {
       this.setState({query: event.target.value});
     }
@@ -27,11 +25,37 @@ class QuerySearch extends React.Component {
   }
 
   randomSearch(event) {
-    alert('Random search specified')
     event.preventDefault();
   }
+
+  componentDidMount() {
+    window.onpopstate = (event) => {
+      console.log(JSON.stringify(event.state));
+      fetch(API+event.state, {
+        method: 'GET' 
+      })
+    .then(response => response.json())
+    .then(data => {
+      let results = data.data.results
+      if (results.length === 0) {
+        this.setState( {
+          query: event.state,
+          results: [],
+          failedQuery: event.state,
+        });
+      }
+      else {
+        this.setState( {
+          query: event.state,
+          results: results,
+          failedQuery: null,
+        })
+      }
+    });
+  };
+}
     
-  getInfo = () => fetch("/api/irsystem/search?q="+this.state.query, {
+  getInfo = () => fetch(API+this.state.query, {
     method: 'GET'
   })
     .then(response => response.json())
@@ -39,17 +63,18 @@ class QuerySearch extends React.Component {
       let results = data.data.results
       if (results.length === 0) {
         this.setState( {
-          "results": [],
+          results: [],
           failedQuery: this.state.query,
         });
       }
       else {
         this.setState( {
-          "results": results,
-          "failedQuery": null,
+          results: results,
+          failedQuery: null,
         })
       }
-      console.log(results);
+      window.location.href = URL+"?q="+this.state.query;
+      window.history.pushState(""+this.state.query, ""+this.state.query, "?q="+this.state.query);
     });
 
   queryRender() {
@@ -59,20 +84,7 @@ class QuerySearch extends React.Component {
       )
     }
   }
-    // else if (this.state.query && this.state.results === ['failed']) {
-    //   return (
-    //     <p>Query: {this.state.query} returned 0 results.</p> 
-    //   )
-    // }
-    // else {
-    //   return (
-    //     <p>Query: {this.state.query}</p>
-    //   )
-    // }
-  // }
-
   resultsRender() {
-    console.log(this.state.success)
     if (this.state.failedQuery) {
       return (
       <p>{"'"+this.state.failedQuery+"' returned 0 results. Please specify a different query."}</p>
