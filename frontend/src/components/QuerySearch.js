@@ -73,7 +73,6 @@ class QuerySearch extends React.Component {
           failedQuery: null,
         })
       }
-      window.location.href = URL+"?q="+this.state.query;
       window.history.pushState(""+this.state.query, ""+this.state.query, "?q="+this.state.query);
     });
 
