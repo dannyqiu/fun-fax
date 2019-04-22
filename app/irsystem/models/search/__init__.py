@@ -16,3 +16,4 @@ REQUIRED_COLUMNS = [
 # Bring search models to package level
 from .boolean import BooleanSearch
 from .dummy import DummySearch
+from .weighted_embedding import WeightedEmbeddingSearch

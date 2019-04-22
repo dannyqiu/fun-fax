@@ -2,9 +2,9 @@ from . import *
 from app.irsystem.models.helpers import *
 from app.irsystem.models.helpers import NumpyEncoder as NumpyEncoder
 
-from ..models.search import BooleanSearch
+from ..models.search import WeightedEmbeddingSearch
 
-search_model = BooleanSearch()
+search_model = WeightedEmbeddingSearch()
 
 @irsystem.route('/search', methods=['GET'])
 def search():
