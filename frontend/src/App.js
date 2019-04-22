@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import QuerySearch from './components/QuerySearch';
+// import FactCard from '.components/FactCard';
 
 class App extends Component {
   render() {
