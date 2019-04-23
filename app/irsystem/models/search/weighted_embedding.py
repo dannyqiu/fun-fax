@@ -48,7 +48,11 @@ class WeightedEmbeddingSearch:
         # average word embeddings if query words don't exist in our corpus (tfidf matrix)
         else:
             tokens = self.vectorizer.build_analyzer()(query)
+            # query was all stopwords, so we'll have to manually tokenize
+            if not tokens:
+                tokens = query.lower().split()
             query_weighted = np.average([self.nlp.vocab[t].vector for t in tokens], axis=0).flatten()
+
         n_query_weighted = query_weighted / (np.linalg.norm(query_weighted) + EPS)
         rankings = self.n_weighted_embeddings.dot(n_query_weighted)
         rel = np.argsort(-rankings)[:top]
