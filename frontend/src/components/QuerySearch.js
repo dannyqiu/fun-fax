@@ -1,4 +1,5 @@
 import React from 'react';
+import FactCard from './FactCard';
 const URL = "localhost:3000/"
 const API = "/api/irsystem/search?q="
 
@@ -91,24 +92,25 @@ class QuerySearch extends React.Component {
     }
     else {
       return (
-    <p>{this.state.results.map(result => (
-      <div className="fact"> <a href={"https://reddit.com/"+result.permalink}>{result.title} </a> <br></br>{"Score: "+result.score+" upvotes | "} Subreddit: r/{result.subreddit}</div>
-    ))}</p>
+    <div id="results">{this.state.results.map(result => (
+      <div className="fact"><FactCard title={result.title} source={result.subreddit} permalink={result.permalink} score={result.score}/></div>
+    ))}</div>
       )
   }
 }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          <br></br> 
-          <input type="text" placeholder="Search for..." value={this.state.value} onChange={this.handleChange} />
-        </label><br></br>
-        <input type="submit" value="Search!" /> <input type="submit" disabled={true} onClick={this.randomSearch} value="Random?" />
+      <form class="active-cyan-3 active-cyan-4" onSubmit={this.handleSubmit}>
+      <i class="fas fa-search" aria-hidden="true"></i>
+          <div class="active-cyan-3 active-cyan-4 mb-4">
+            <input type="text" placeholder="Search for..." value={this.state.value} onChange={this.handleChange} aria-label="Search" class="search-bar" id="query"/>
+          </div>
+        <div>
+        <input type="submit" value="Search!" class="btn btn-primary" id="button"/> <input type="submit" disabled={true} onClick={this.randomSearch} value="Random?" class="btn btn-primary" id="button"/>
+        </div>
         {this.queryRender()}
         {this.resultsRender()}
-
         </form>
     );
  }

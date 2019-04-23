@@ -9,11 +9,9 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <div>
-            {/* <span class="odd">F</span><span class="even">u</span><span class="odd">n</span><span> </span>
-            <span class="even">F</span><span class="odd">a</span><span class="even">x</span><span class="odd">.</span> */}
-            <span class="odd">Fun Fax? Fun Fax.</span>
+            <span className="title">Fun Fax? Fun Fax.</span>
           </div>
-          <div>
+          <div className="search">
           <QuerySearch />
           </div>
         </header>
