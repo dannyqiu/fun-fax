@@ -116,32 +116,27 @@ class QuerySearch extends React.Component {
       window.history.pushState(""+this.state.query, ""+this.state.query, "?q="+this.state.query);
     });
 
-  queryRender() {
-    if (this.state.query && this.state.results) {
-      return (
-        <p>Query: {this.state.query}</p>
-      )
-    }
-  }
-  resultsRender() {
+  failedRender() {
     if (this.state.failedQuery) {
       return (
-      <p>{"'"+this.state.failedQuery+"' returned 0 results. Please specify a different query."}</p>
+      <div class="failed">
+        <p>{"'"+this.state.failedQuery+"' returned 0 results. Please specify a different query."}</p>
+      </div>
       )
     }
-    else {
-      this.state.results.map(result => ( console.log(result.permalink)));
-      return (
-    <div>{this.state.results.map(result => (
-      <div className="fact"><FactCard title={result.title} source={result.subreddit} permalink={"https://reddit.com"+result.permalink} score={result.score}/></div>
-    ))}</div>
-      )
   }
-}
+    resultsRender() {
+      if (!this.state.failedQuery) {
+        return (
+          <div>{this.state.results.map(result => (
+            <div className="fact"><FactCard title={result.title} source={result.subreddit} permalink={"https://reddit.com"+result.permalink} score={result.score}/></div>
+          ))}</div>
+            )
+        } 
+      }
 
   render() {
     return (
-      <div>
       <div class="search">
       <form class="active-cyan-3 active-cyan-4" onSubmit={this.handleSubmit}>
       <i class="fas fa-search" aria-hidden="true"></i>
@@ -151,11 +146,10 @@ class QuerySearch extends React.Component {
         <div>
         <input type="submit" value="Search!" class="btn btn-primary" id="button"/> <input type="submit" disabled={true} onClick={this.randomSearch} value="Random?" class="btn btn-primary" id="button"/>
         </div>
-        {this.queryRender()}
         </form>
-        </div>
+        {this.failedRender()}
         <div className="results">
-        {this.resultsRender()}
+        {this.resultsRender()} 
         </div>
        </div> 
     );

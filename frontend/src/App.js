@@ -11,8 +11,8 @@ class App extends Component {
           <div>
             <span className="title">Fun Fax? Fun Fax.</span>
           </div>
-          <div className="search">
-          <QuerySearch />
+          <div className="torso">
+            <QuerySearch />
           </div>
         </header>
         
