@@ -53,6 +53,10 @@ class WeightedEmbeddingSearch:
                 tokens = query.lower().split()
             query_weighted = np.average([self.nlp.vocab[t].vector for t in tokens], axis=0).flatten()
 
+        # if we have no embeddings for the given query, we're out of luck
+        if np.count_nonzero(query_weighted) == 0:
+            return []
+
         n_query_weighted = query_weighted / (np.linalg.norm(query_weighted) + EPS)
         rankings = self.n_weighted_embeddings.dot(n_query_weighted)
         rel = np.argsort(-rankings)[:top]
