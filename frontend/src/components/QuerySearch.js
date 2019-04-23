@@ -1,6 +1,5 @@
 import React from 'react';
 import FactCard from './FactCard';
-const URL = "localhost:3000/"
 const API = "/api/irsystem/search?q="
 
 class QuerySearch extends React.Component {
@@ -17,7 +16,10 @@ class QuerySearch extends React.Component {
   }
 
   handleChange(event) {
-      this.setState({query: event.target.value});
+      this.setState( {
+       query: event.target.value,
+       value: event.target.value //accounts for when the value was predetermined on a reload
+      });
     }
   
   handleSubmit(event) {
@@ -33,6 +35,9 @@ class QuerySearch extends React.Component {
     let params = new URLSearchParams(window.location.search);
     let queryTerm = params.get('q');
     if (queryTerm !== null) {
+      this.setState({
+        value: queryTerm
+      })
       fetch(API+queryTerm, {
         method: 'GET' 
       })
@@ -125,9 +130,10 @@ class QuerySearch extends React.Component {
       )
     }
     else {
+      this.state.results.map(result => ( console.log(result.permalink)));
       return (
-    <div id="results">{this.state.results.map(result => (
-      <div className="fact"><FactCard title={result.title} source={result.subreddit} permalink={result.permalink} score={result.score}/></div>
+    <div>{this.state.results.map(result => (
+      <div className="fact"><FactCard title={result.title} source={result.subreddit} permalink={"https://reddit.com"+result.permalink} score={result.score}/></div>
     ))}</div>
       )
   }
@@ -135,6 +141,8 @@ class QuerySearch extends React.Component {
 
   render() {
     return (
+      <div>
+      <div class="search">
       <form class="active-cyan-3 active-cyan-4" onSubmit={this.handleSubmit}>
       <i class="fas fa-search" aria-hidden="true"></i>
           <div class="active-cyan-3 active-cyan-4 mb-4">
@@ -144,8 +152,12 @@ class QuerySearch extends React.Component {
         <input type="submit" value="Search!" class="btn btn-primary" id="button"/> <input type="submit" disabled={true} onClick={this.randomSearch} value="Random?" class="btn btn-primary" id="button"/>
         </div>
         {this.queryRender()}
-        {this.resultsRender()}
         </form>
+        </div>
+        <div className="results">
+        {this.resultsRender()}
+        </div>
+       </div> 
     );
  }
 }
