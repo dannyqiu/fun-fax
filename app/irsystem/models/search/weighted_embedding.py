@@ -6,6 +6,8 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from . import FUN_FACT_TITLE_CSV, TIL_TITLE_CSV, YSK_TITLE_CSV, REQUIRED_COLUMNS
 
+EPS = 1e-6
+
 class WeightedEmbeddingSearch:
 
     def __init__(self):
@@ -25,13 +27,14 @@ class WeightedEmbeddingSearch:
         tfidf_matrix = self.vectorizer.fit_transform(title_data["title"])
 
         print("Loading spacy")
-        nlp = spacy.load('en_core_web_lg')
+        self.nlp = spacy.load('en_core_web_lg')
 
         print("Computing weighted embeddings")
         features = self.vectorizer.get_feature_names()
-        self.f_vectors = np.array([nlp.vocab[f].vector for f in features])
-        self.weighted_embeddings = tfidf_matrix.dot(self.f_vectors)
-        assert self.weighted_embeddings.shape == (len(title_data.index), 300)
+        self.f_vectors = np.array([self.nlp.vocab[f].vector for f in features])
+        weighted_embeddings = tfidf_matrix.dot(self.f_vectors)
+        assert weighted_embeddings.shape == (len(title_data.index), 300)
+        self.n_weighted_embeddings = weighted_embeddings / (np.linalg.norm(weighted_embeddings, axis=1)[:, np.newaxis] + EPS)
 
         print("Compressing pandas dataframe into index")
         self.index = list(title_data.itertuples())
@@ -40,8 +43,14 @@ class WeightedEmbeddingSearch:
 
     def search(self, query, top=10):
         query_tfidf = self.vectorizer.transform([query])
-        query_weighted = query_tfidf.dot(self.f_vectors)
-        rankings = self.weighted_embeddings.dot(query_weighted.flatten())
+        if query_tfidf.count_nonzero() > 0:
+            query_weighted = query_tfidf.dot(self.f_vectors).flatten()
+        # average word embeddings if query words don't exist in our corpus (tfidf matrix)
+        else:
+            tokens = self.vectorizer.build_analyzer()(query)
+            query_weighted = np.average([self.nlp.vocab[t].vector for t in tokens], axis=0).flatten()
+        n_query_weighted = query_weighted / (np.linalg.norm(query_weighted) + EPS)
+        rankings = self.n_weighted_embeddings.dot(n_query_weighted)
         rel = np.argsort(-rankings)[:top]
         results = [
             {
