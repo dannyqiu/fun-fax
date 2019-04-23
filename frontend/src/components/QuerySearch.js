@@ -30,9 +30,10 @@ class QuerySearch extends React.Component {
   }
 
   componentDidMount() {
-    window.onpopstate = (event) => {
-      console.log(JSON.stringify(event.state));
-      fetch(API+event.state, {
+    let params = new URLSearchParams(window.location.search);
+    let queryTerm = params.get('q');
+    if (queryTerm !== null) {
+      fetch(API+queryTerm, {
         method: 'GET' 
       })
     .then(response => response.json())
@@ -40,20 +41,53 @@ class QuerySearch extends React.Component {
       let results = data.data.results
       if (results.length === 0) {
         this.setState( {
-          query: event.state,
+          query: queryTerm,
           results: [],
-          failedQuery: event.state,
+          failedQuery: queryTerm,
         });
       }
       else {
         this.setState( {
-          query: event.state,
+          query: queryTerm,
           results: results,
           failedQuery: null,
         })
       }
     });
-  };
+    }
+    
+    window.onpopstate = (event) => {
+      if (event.state) {
+        fetch(API+event.state, {
+          method: 'GET' 
+        })
+        .then(response => response.json())
+        .then(data => {
+          let results = data.data.results
+          if (results.length === 0) {
+            this.setState( {
+              query: event.state,
+              results: [],
+              failedQuery: event.state,
+            });
+          }
+          else {
+            this.setState( {
+              query: event.state,
+              results: results,
+              failedQuery: null,
+            })
+          }
+        });
+        }
+        else {
+          this.setState( {
+            query: '',
+            results: [],
+            failedQuery: null
+          })
+        }
+      };
 }
     
   getInfo = () => fetch(API+this.state.query, {
