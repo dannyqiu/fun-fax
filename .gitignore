@@ -7,6 +7,7 @@ vagrant/a4keypair.pem
 /data/
 *.csv
 /*.json
+/*.ipynb
 
 # React files
 app/static/css
