@@ -2,14 +2,10 @@ import nltk
 from collections import defaultdict
 from nltk.stem.snowball import EnglishStemmer  # Assuming we're working with English
 
-nltk.download('punkt')
-nltk.download('stopwords')
-DEFAULT_STOPWORDS = nltk.corpus.stopwords.words('english')
-
 class InvertedIndex:
     """ Inverted index datastructure """
 
-    def __init__(self, tokenizer=nltk.word_tokenize, stemmer=EnglishStemmer(), stopwords=DEFAULT_STOPWORDS):
+    def __init__(self, tokenizer=nltk.word_tokenize, stemmer=EnglishStemmer(), stopwords=nltk.corpus.stopwords.words('english')):
         """
         tokenizer   -- NLTK compatible tokenizer function
         stemmer     -- NLTK compatible stemmer
