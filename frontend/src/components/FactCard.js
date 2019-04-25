@@ -3,12 +3,12 @@ import SimilarFact from "./SimilarFact";
  
 const FactCard = (props) => {
   return (
-    <div class="card">
-    <div class="card-body">
-      <a class="card-text" target="_blank" id="fact" href={props.permalink}>{props.title}</a>
+    <div className="card">
+    <div className="card-body">
+      <a className="card-text" target="_blank" rel="noopener noreferrer" id="fact" href={props.permalink}>{props.title}</a>
     </div>
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item" id="score">{props.score} ⭐️'s</li>
+    <ul className="list-group list-group-flush">
+      <li className="list-group-item" id="score">{props.score} ⭐️'s</li>
       <SimilarFact similar={props.similar}/>
     </ul>
   </div>
