@@ -5,8 +5,8 @@ class SearchBar extends Component {
   render() {
     return (
       <div className="search">
-        <i className="fas fa-search" aria-hidden="true" />
         <div className="active-cyan-3 active-cyan-4 mb-4">
+          <i className="fas fa-search" aria-hidden="true" />
           <input name="query"
                 type="text"
                 placeholder="Search for..."

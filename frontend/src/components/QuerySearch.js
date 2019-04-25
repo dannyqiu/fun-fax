@@ -93,20 +93,18 @@ class QuerySearch extends React.Component {
             query={this.state.query}
             category={this.state.category}
             />
-          <label className="switch">
-            <input type="checkbox" checked={this.state.advancedSearch} onChange={() => this.enableAdvancedSearch()}></input>
-            <span className="slider round"></span>
-          </label>
-          {this.state.advancedSearch && (
             <AdvancedSearch
               recencyChanged={v => this.setState({ recency: v })}
               controversialChanged={v => this.setState({ controversial: v })}
               recency={this.state.recency}
               controversial={this.state.controversial}
+              advancedChanged={() => this.enableAdvancedSearch()}
+              isAdvancedSearch={this.state.advancedSearch}
               />
-          )}
-          <input type="submit" value="Search!" className="btn btn-primary" id="button" onClick={(e) => this.handleSubmit(e)} /> 
-          <input type="submit" disabled={true}  value="Random?" className="btn btn-primary" id="button" onClick={this.randomSearch} />
+          <div className="button-area">
+            <input type="submit" value="Search!" className="btn btn-primary" id="button" onClick={(e) => this.handleSubmit(e)} /> 
+            <input type="submit" disabled={true}  value="Random?" className="btn btn-primary" id="button" onClick={this.randomSearch} />
+          </div>
         </form>
         {this.state.failedQuery !== null
           ? <FailedResults query={this.state.failedQuery} />
