@@ -11,6 +11,7 @@ REQUIRED_COLUMNS = [
     "title",
     "subreddit",
     "permalink",
+    "score",
 ]
 
 # Bring search models to package level
