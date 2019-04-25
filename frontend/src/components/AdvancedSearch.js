@@ -5,14 +5,14 @@ class AdvancedSearch extends Component {
   render() {
     return (
       <div className="advanced-search">
-        <div class="custom-control custom-switch">
+        <div className="custom-control custom-switch">
           <input type="checkbox"
                  className="custom-control-input"
                  id="advancedSearchToggle"
                  checked={this.props.isAdvancedSearch}
                  onChange={() => this.props.advancedChanged()}>
           </input>
-          <label class="custom-control-label" for="advancedSearchToggle">Toggle Advanced Search</label>
+          <label className="custom-control-label" htmlFor="advancedSearchToggle">Toggle Advanced Search</label>
         </div>
         {this.props.isAdvancedSearch && (
           <div className="sorting-area">
