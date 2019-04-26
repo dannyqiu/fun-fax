@@ -85,14 +85,15 @@ class QuerySearch extends React.Component {
 
   render() {
     return (
-      <div>
-        <form className="active-cyan-3 active-cyan-4" onSubmit={this.handleSubmit}>
+      <div className="mt-2">
+        <form className="active-cyan-3 active-cyan-4 justify-content-center" onSubmit={this.handleSubmit}>
           <SearchBar 
             queryChanged={v => this.setState({ query: v})}
             categoryChanged={v => this.setState({ category: v})}
             query={this.state.query}
             category={this.state.category}
             />
+            <div className="mb-3" />
             <AdvancedSearch
               recencyChanged={v => this.setState({ recency: v })}
               controversialChanged={v => this.setState({ controversial: v })}
@@ -101,16 +102,19 @@ class QuerySearch extends React.Component {
               advancedChanged={() => this.enableAdvancedSearch()}
               isAdvancedSearch={this.state.advancedSearch}
               />
+            <div className="mb-2" />
           <div className="button-area">
-            <input type="submit" value="Search!" className="btn btn-primary" id="button" onClick={(e) => this.handleSubmit(e)} /> 
+            <input type="submit" value="Search!" className="btn btn-primary mr-3" id="button" onClick={(e) => this.handleSubmit(e)} /> 
             <input type="submit" disabled={true}  value="Random?" className="btn btn-primary" id="button" onClick={this.randomSearch} />
           </div>
         </form>
+      <div className="mt-4">
         {this.state.failedQuery !== null
           ? <FailedResults query={this.state.failedQuery} />
           : <Results results={this.state.results} />
         }
-      </div> 
+      </div>
+    </div> 
     );
   }
 
