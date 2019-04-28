@@ -1,7 +1,7 @@
 class WeightedEmbeddingSearch:
 
     def __init__(self):
-        print("Loading data csv")
+        #print("Loading data csv")
         #fun_fact_title_data = pd.read_csv(FUN_FACT_TITLE_CSV).dropna(subset=REQUIRED_COLUMNS)
         til_title_data = pd.read_csv(TIL_TITLE_CSV).dropna(subset=REQUIRED_COLUMNS)
         #ysk_title_data = pd.read_csv(YSK_TITLE_CSV).dropna(subset=REQUIRED_COLUMNS)
@@ -12,14 +12,14 @@ class WeightedEmbeddingSearch:
             #ysk_title_data,
         ], join='inner').reset_index(drop=True)
 
-        print("Computing tf-idf matrix")
+        #print("Computing tf-idf matrix")
         self.vectorizer = TfidfVectorizer(stop_words='english', dtype=np.float32)
         tfidf_matrix = self.vectorizer.fit_transform(self.title_data["title"])
 
-        print("Loading spacy")
+        #print("Loading spacy")
         self.nlp = spacy.load('en_core_web_lg')
 
-        print("Computing weighted embeddings")
+        #print("Computing weighted embeddings")
         features = self.vectorizer.get_feature_names()
         self.f_vectors = np.array([self.nlp.vocab[f].vector for f in features])
         weighted_embeddings = tfidf_matrix.dot(self.f_vectors)
@@ -29,15 +29,15 @@ class WeightedEmbeddingSearch:
         #print("Compressing pandas dataframe into index")
         #self.index = list(title_data.itertuples())
 
-        print("Done loading {} rows".format(len(self.title_data.index)))
+        #print("Done loading {} rows".format(len(self.title_data.index)))
     def random(self,method = 'similarity', top = 10):
         funfact = self.title_data.iloc[random.randint(0, len(self.title_data))]["title"]
-        print ("fact: " + funfact)
+        #print ("fact: " + funfact)
         #results = self.search(funfact, method, top)
         tokens = self.vectorizer.build_analyzer()(funfact)
         query_tok = [x for x in tokens if random.random() < .5]
         rand_query = " ".join(query_tok)
-        print ("rand: " + rand_query)
+        #print ("rand: " + rand_query)
         return self.search(rand_query, method, top)
     
 #     def query(self, query, method = 'similarity', top = 10):
@@ -67,11 +67,11 @@ class WeightedEmbeddingSearch:
         ranked_scores = list(ranked_df['score'])
         top_ranked_em = self.n_weighted_embeddings[rankings_index]
         ranked_rankings = rankings[rankings_index]
-        print('about to call kmeans')
+        #print('about to call kmeans')
         results = self.kMeans(ranked_titles, ranked_scores, ranked_rankings, top_ranked_em, method)
         
 #         index = list(ranked_df.itertuples())
-        print('done with itertuple')
+        #print('done with itertuple')
         results = [
             {
                 "type": "submission",
@@ -102,7 +102,7 @@ class WeightedEmbeddingSearch:
         
     # cluster number to top num based on similarity
     def topSimOfEachCluster(self, cluster_labels, num, most_common):
-        print('topsimofeachcluster')
+        #print('topsimofeachcluster')
         res = {}
         clusters_included = set(most_common)
         for i, el in enumerate(cluster_labels):
@@ -116,14 +116,14 @@ class WeightedEmbeddingSearch:
     
     #takes topOfEachCluster and gets the top num by score
     def topScoreOfEachCluster(self, sim_results, num, scores):
-        print('topscoreofeachcluster')
+        #print('topscoreofeachcluster')
         for key in sim_results:
             sim_results[key].sort(key=lambda x: scores[x], reverse = True)
             sim_results[key] = sim_results[key][:num]
             
     #sort results by method        
     def topResultsSorted(self, results, rankings, scores, method = 'similarity'):
-        print('topresultssorted')
+        #print('topresultssorted')
         if method == 'similarity':
             for key in results:
                 results[key].sort(key=lambda x: rankings[x], reverse = True) #sorts within a cluster
