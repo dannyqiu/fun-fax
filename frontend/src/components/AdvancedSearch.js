@@ -27,10 +27,10 @@ class AdvancedSearch extends Component {
             </select>
 
             <span className="mr-1">Sort Preference:</span>
-            <select name="controversial"
+            <select name="sort"
                     className="form-control form-control-sm"
-                    value={this.props.controversial || ''}
-                    onChange={e => {this.props.controversialChanged(e.target.value)}}>
+                    value={this.props.sort || ''}
+                    onChange={e => {this.props.sortChanged(e.target.value)}}>
               <option value={null}></option>
               <option value="relevancy">Relevancy</option>
               <option value="popularity">Popularity</option>

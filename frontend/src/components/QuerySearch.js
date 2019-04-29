@@ -17,10 +17,10 @@ class QuerySearch extends React.Component {
       query: params.get('q') || '',
       results: [],
       failedQuery: null,
-      advancedSearch: params.get("recency") !== null || params.get("controversial") !== null,
+      advancedSearch: params.get("recency") !== null || params.get("sort") !== null,
       category: params.get("category"),
       recency: params.get("recency"),
-      controversial: params.get("controversial")
+      sort: params.get("sort")
     };
   }
 
@@ -51,8 +51,8 @@ class QuerySearch extends React.Component {
     if (this.state.recency !== null) {
       params['recency'] = this.state.recency;
     }
-    if (this.state.controversial !== null) {
-      params['controversial'] = this.state.controversial;
+    if (this.state.sort !== null) {
+      params['sort'] = this.state.sort;
     }
     let url = buildURLQuery(SEARCH_API, params);
     let displayUrl = buildURLQuery('/', params);
@@ -96,7 +96,7 @@ class QuerySearch extends React.Component {
     this.setState((prevState) => ({
       advancedSearch: !prevState.advancedSearch,
       recency: null,
-      controversial: null
+      sort: null
     }));
   }
 
@@ -105,7 +105,7 @@ class QuerySearch extends React.Component {
       <div className="query-search">
         <form className="active-cyan-3 active-cyan-4 justify-content-center"
               onSubmit={e => { this.doSearch(); e.preventDefault(e) }}
-              autocomplete="off">
+              autoComplete="off">
           <SearchBar
             queryChanged={v => this.setState({ query: v})}
             categoryChanged={v => this.setState({ category: v})}
@@ -115,9 +115,9 @@ class QuerySearch extends React.Component {
           <div className="mb-3" />
           <AdvancedSearch
             recencyChanged={v => this.setState({ recency: v })}
-            controversialChanged={v => this.setState({ controversial: v })}
+            sortChanged={v => this.setState({ sort: v })}
             recency={this.state.recency}
-            controversial={this.state.controversial}
+            sort={this.state.sort}
             advancedChanged={() => this.enableAdvancedSearch()}
             isAdvancedSearch={this.state.advancedSearch}
             />
