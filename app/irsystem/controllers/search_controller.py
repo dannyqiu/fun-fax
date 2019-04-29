@@ -18,6 +18,10 @@ def search():
         results = []
     return http_resource(results, "results", True)
 
+@irsystem.route('/random', methods=['GET'])
+def random():
+    results = search_model.random()
+    return http_resource(results, "results", True)
 
 from ..models.search import DummySearch
 dummy_search_model = DummySearch()

@@ -2,6 +2,7 @@ import re
 import spacy
 import numpy as np
 import pandas as pd
+import random
 import scipy
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import SpectralClustering
@@ -95,17 +96,17 @@ class WeightedEmbeddingClusteringSearch:
         if sort_method == "popularity":
             min_allowed_similarity = np.min(ranked_rankings[best_similarity_idx])
             # gives the highest Reddit score doc in each cluster that is above the similarity threshold
-            best_score_doc_id = [
+            best_score_doc_id = np.array([
                 np.argsort(-np.where((clustering.labels_ == c) & (ranked_rankings >= min_allowed_similarity), ranked_scores, np.nan), kind='stable')[0]
                 for c in range(10)
-            ]
+            ])
             return best_score_doc_id[np.argsort(-rankings[best_score_doc_id])]
         else:
             # gives the highest similarity doc in each cluster since top_ranked_em is ordered
             best_similarity_doc_id = rankings_idx[best_similarity_idx]
             return best_similarity_doc_id[np.argsort(-rankings[best_similarity_doc_id])]
 
-    def search(self, query, sort_method: str="similarity", recency_sort: str=None, top: int=10):
+    def search(self, query, sort_method: str="relevancy", recency_sort: str=None, top: int=10):
         query_weighted = self._compute_query_embedding(query)
         # if we have no embeddings for the given query, we're out of luck
         if np.count_nonzero(query_weighted) == 0:
@@ -121,6 +122,16 @@ class WeightedEmbeddingClusteringSearch:
                 rankings *= self.p_old_dates
         doc_ids = self._group_documents(rankings, sort_method)
         return self._format_results(doc_ids)
+
+    def random(self):
+        sample_docs = [d.title for d in random.sample(self.index, k=3)]
+        sample_tfidf_matrix = self.vectorizer.transform(sample_docs)
+        features = self.vectorizer.get_feature_names()
+        words = set()
+        for r, c in zip(*sample_tfidf_matrix.nonzero()):
+            if sample_tfidf_matrix[r, c] > np.random.random():
+                words.add(features[c])
+        return self.search(" ".join(words), sort_method="popularity")
 
     def _format_results(self, doc_ids: List[int]):
         results = [
