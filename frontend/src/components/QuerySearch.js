@@ -7,6 +7,7 @@ import { buildURLQuery } from '../utils';
 
 const SEARCH_API = "/api/irsystem/search";
 const RANDOM_API = "/api/irsystem/random";
+const SEE_MORE_API = "/api/irsystem/more";
 // const SEARCH_API = "/api/irsystem/dummy";
 
 class QuerySearch extends React.Component {
@@ -92,6 +93,23 @@ class QuerySearch extends React.Component {
     });
   }
 
+  async seeMore(query_vector) {
+    let params = {
+      'q': query_vector
+    };
+    return fetch(buildURLQuery(SEE_MORE_API, params), {
+      method: 'GET'
+    })
+    .then(response => response.json())
+    .then(data => {
+      let results = data.data.results;
+      this.setState({
+        results: results,
+        failedQuery: null
+      });
+    });
+  }
+
   /* Enables advanced searching slider */
   enableAdvancedSearch() {
     this.setState((prevState) => ({
@@ -132,7 +150,7 @@ class QuerySearch extends React.Component {
           {this.state.failedQuery !== null
             ? <FailedResults query={this.state.failedQuery} />
             : <Results results={this.state.results}
-                      seeMoreEngabled={(docID) => console.log(docID)} />
+                       seeMoreClicked={q => this.seeMore(q)} />
           }
         </div>
     </div>

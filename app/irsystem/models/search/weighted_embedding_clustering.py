@@ -11,7 +11,7 @@ from typing import List
 
 from . import FUN_FACT_TITLE_CSV, TIL_TITLE_CSV, YSK_TITLE_CSV
 from . import REQUIRED_COLUMNS, BANNED_SUBREDDITS, TOKENIZATION_REGEX
-from ..utils import normalize_range
+from ..utils import normalize_range, encode_numpy_array
 
 EPS = 1e-6
 ENTROPY_FACTOR = 0.1
@@ -42,9 +42,9 @@ class WeightedEmbeddingClusteringSearch:
         print("Computing weighted embeddings")
         features = self.vectorizer.get_feature_names()
         self.f_vectors = np.array([self.nlp.vocab[f].vector for f in features])
-        weighted_embeddings = tfidf_matrix.dot(self.f_vectors)
-        assert weighted_embeddings.shape == (len(title_data.index), 300)
-        self.n_weighted_embeddings = weighted_embeddings / (np.linalg.norm(weighted_embeddings, axis=1)[:, np.newaxis] + EPS)
+        self.weighted_embeddings = tfidf_matrix.dot(self.f_vectors)
+        assert self.weighted_embeddings.shape == (len(title_data.index), 300)
+        self.n_weighted_embeddings = self.weighted_embeddings / (np.linalg.norm(self.weighted_embeddings, axis=1)[:, np.newaxis] + EPS)
 
         print("Computing documents entropy")
         self.entropy = self._compute_entropy(tfidf_matrix)
@@ -97,7 +97,7 @@ class WeightedEmbeddingClusteringSearch:
             min_allowed_similarity = np.min(ranked_rankings[best_similarity_idx])
             # gives the highest Reddit score doc in each cluster that is above the similarity threshold
             best_score_doc_id = np.array([
-                np.argsort(-np.where((clustering.labels_ == c) & (ranked_rankings >= min_allowed_similarity), ranked_scores, np.nan), kind='stable')[0]
+                np.argsort(-np.where((clustering.labels_ == c) & (ranked_rankings >= min_allowed_similarity), ranked_scores, np.nan))[0]
                 for c in range(10)
             ])
             return best_score_doc_id[np.argsort(-rankings[best_score_doc_id])]
@@ -106,14 +106,20 @@ class WeightedEmbeddingClusteringSearch:
             best_similarity_doc_id = rankings_idx[best_similarity_idx]
             return best_similarity_doc_id[np.argsort(-rankings[best_similarity_doc_id])]
 
-    def search(self, query, sort_method: str="relevancy", recency_sort: str=None, top: int=10):
-        query_weighted = self._compute_query_embedding(query)
-        # if we have no embeddings for the given query, we're out of luck
-        if np.count_nonzero(query_weighted) == 0:
-            return []
+    def _compute_rocchio(self, query_embedding, doc_ids: List[int]):
+        alpha = 0.2
+        beta = 0.7
+        gamma = 0.1
+        def _rocchio_helper(selected_id):
+            new_em = alpha * query_embedding
+            new_em += beta * self.weighted_embeddings[selected_id]
+            new_em -= gamma * np.average(self.weighted_embeddings[doc_ids[doc_ids != selected_id]], axis=0)
+            return new_em
+        return np.array([_rocchio_helper(i) for i in doc_ids])
 
-        n_query_weighted = query_weighted / (np.linalg.norm(query_weighted) + EPS)
-        rankings = self.n_weighted_embeddings.dot(n_query_weighted)
+    def _search_helper(self, query_embedding, sort_method: str, recency_sort: str, top: int):
+        n_query_embedding = query_embedding / (np.linalg.norm(query_embedding) + EPS)
+        rankings = self.n_weighted_embeddings.dot(n_query_embedding)
         rankings += ENTROPY_FACTOR * self.entropy
         if recency_sort is not None:
             if recency_sort == "new":
@@ -121,10 +127,21 @@ class WeightedEmbeddingClusteringSearch:
             elif recency_sort == "old":
                 rankings *= self.p_old_dates
         doc_ids = self._group_documents(rankings, sort_method)
-        return self._format_results(doc_ids)
+        rocchios = self._compute_rocchio(query_embedding, doc_ids)
+        return self._format_results(doc_ids, rocchios)
+
+    def search(self, query, sort_method: str="relevancy", recency_sort: str=None, top: int=10):
+        query_weighted = self._compute_query_embedding(query)
+        # if we have no embeddings for the given query, we're out of luck
+        if np.count_nonzero(query_weighted) == 0:
+            return []
+        return self._search_helper(query_weighted, sort_method, recency_sort, top)
+
+    def see_more(self, query_embedding, sort_method: str="relevancy", recency_sort: str=None, top: int=10):
+        return self._search_helper(query_embedding, sort_method, recency_sort, top)
 
     def random(self):
-        sample_docs = [d.title for d in random.sample(self.index, k=3)]
+        sample_docs = [d.title for d in random.sample(self.index, k=1)]
         sample_tfidf_matrix = self.vectorizer.transform(sample_docs)
         features = self.vectorizer.get_feature_names()
         words = set()
@@ -133,7 +150,7 @@ class WeightedEmbeddingClusteringSearch:
                 words.add(features[c])
         return self.search(" ".join(words), sort_method="popularity")
 
-    def _format_results(self, doc_ids: List[int]):
+    def _format_results(self, doc_ids: List[int], rocchios):
         results = [
             {
                 "type": "submission",
@@ -143,7 +160,8 @@ class WeightedEmbeddingClusteringSearch:
                 "score": self.index[d].score,
                 "num_comments": self.index[d].num_comments,
                 "created_utc": self.index[d].created_utc,
+                "see_more_query_vector": encode_numpy_array(r),
             }
-            for d in doc_ids
+            for d, r in zip(doc_ids, rocchios)
         ]
         return results

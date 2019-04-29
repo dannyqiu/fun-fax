@@ -6,6 +6,7 @@ class Results extends Component {
 
   /* Result rendering function, feeds props to FactCard component */
   render() {
+    console.log(this.props.results)
     return (
       <div className="results">
       {this.props.results.map(result => (
@@ -19,12 +20,12 @@ class Results extends Component {
             comments={result.num_comments}
             imgURL={result.imgURL}
             time={moment.unix(result.created_utc).fromNow()}
-            seeMoreEnabled={(docID) => this.props.seeMoreEnabled(docID)}
+            seeMoreClicked={() => this.props.seeMoreClicked(result.see_more_query_vector)}
             />
       ))}
       </div>
     );
-  } 
+  }
 }
 
 export default Results;

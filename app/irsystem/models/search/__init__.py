@@ -22,6 +22,8 @@ BANNED_SUBREDDITS = [
     'ShittyTodayILearned',
     'TheOnion',
     'WTF',
+    'FULLCOMMUNISM',
+    'circlejerkseattle',
     # non-english
     'Suomi',
     'BitcoinDK',

@@ -3,6 +3,7 @@ from app.irsystem.models.helpers import *
 from app.irsystem.models.helpers import NumpyEncoder as NumpyEncoder
 
 from ..models.search import WeightedEmbeddingClusteringSearch
+from ..models.utils import decode_numpy_array
 
 search_model = WeightedEmbeddingClusteringSearch()
 
@@ -18,10 +19,25 @@ def search():
         results = []
     return http_resource(results, "results", True)
 
+@irsystem.route('/more', methods=['GET'])
+def see_more():
+    query = request.args.get('q', default=None)
+    if query:
+        query_vector = decode_numpy_array(query)
+        # TODO: implement category
+        category = request.args.get('category', default=None)
+        sort_method = request.args.get('sort', default="similarity")
+        recency_sort = request.args.get('recency', default=None)
+        results = search_model.see_more(query_vector, sort_method=sort_method, recency_sort=recency_sort)
+    else:
+        results = []
+    return http_resource(results, "results", True)
+
 @irsystem.route('/random', methods=['GET'])
 def random():
     results = search_model.random()
     return http_resource(results, "results", True)
+
 
 from ..models.search import DummySearch
 dummy_search_model = DummySearch()

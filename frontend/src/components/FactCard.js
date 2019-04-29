@@ -1,5 +1,5 @@
 import React from 'react';
- 
+
 const FactCard = (props) => {
   return (
     <div className="card container mx-auto mb-3">
@@ -23,11 +23,11 @@ const FactCard = (props) => {
             <img className="fact-picture mt-2 justify-content-center" src={props.imgURL} alt="Piction in question"></img>
             )}
         </div>
-            
+
         <button id="see-more"
                 type="button"
                 className="btn btn-outline-primary btn-small mt-1 mb-1"
-                onClick={(docID) => props.seeMoreEnabled(docID)}
+                onClick={() => props.seeMoreClicked()}
                 >
               See Similar Queries
         </button>
