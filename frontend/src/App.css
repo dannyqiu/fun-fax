@@ -25,7 +25,7 @@ html, body {
 }
 
 #see-more {
-  width: 40%;
+  width: 20%;
   margin: 0 auto;
   float: none;
 }
@@ -41,6 +41,10 @@ html, body {
 
 .container {
   width: 65%;
+}
+
+.card-body {
+  padding: .75rem !important;
 }
 
 .active-cyan-4 input[type=text]:focus:not([readonly]) {
