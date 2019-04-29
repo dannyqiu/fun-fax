@@ -16,18 +16,24 @@ class AdvancedSearch extends Component {
         </div>
         {this.props.isAdvancedSearch && (
           <div className="sorting-area form-inline justify-content-center">
-            <span>Recency Sort: </span>
-            <select name="recency" className="selectpicker form-control mr-2 mb-2" value={this.props.recency || ''} onChange={e => {this.props.recencyChanged(e.target.value)}}>
-              <option value=""></option>
-              <option value="newtoold">Newest to Oldest</option>
-              <option value="oldtonew">Oldest to Newest</option>
+            <span className="mr-1">Recency:</span>
+            <select name="recency"
+                    className="form-control form-control-sm mr-2"
+                    value={this.props.recency || ''}
+                    onChange={e => {this.props.recencyChanged(e.target.value)}}>
+              <option value={null}></option>
+              <option value="new">Newest to Oldest</option>
+              <option value="old">Oldest to Newest</option>
             </select>
 
-            <span>Controversial Sort: </span>
-            <select name="controversial" className="selectpicker form-control mb-2" value={this.props.controversial || ''} onChange={e => {this.props.controversialChanged(e.target.value)}}>
-              <option value=""></option>
-              <option value="mosttoleast">Most to Least</option>
-              <option value="leasttomost">Least to Most</option>
+            <span className="mr-1">Sort Preference:</span>
+            <select name="controversial"
+                    className="form-control form-control-sm"
+                    value={this.props.controversial || ''}
+                    onChange={e => {this.props.controversialChanged(e.target.value)}}>
+              <option value={null}></option>
+              <option value="relevancy">Relevancy</option>
+              <option value="popularity">Popularity</option>
             </select>
           </div>
         )}

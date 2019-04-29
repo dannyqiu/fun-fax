@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
-import './App.css';
 import QuerySearch from './components/QuerySearch';
+import './App.css';
 
 class App extends Component {
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <div>
-            <span className="title">Fun Fax? Fun Fax.</span>
-          </div>
+          <h1 className="title">Fun Fax? Fun Fax.</h1>
         </header>
         <div className="torso">
           <QuerySearch />

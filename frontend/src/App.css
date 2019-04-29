@@ -1,26 +1,20 @@
+html, body {
+  min-height: 100%;
+  height: 100%;
+  background-color: #efefef !important;
+}
+
 .App {
   text-align: center;
-  background-color: #efefef;
 }
 
 .App-header {
-  background-color: #efefef;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: #282c34;
-}
-
-.App-link {
-  color: #61dafb;
+  margin-top: 100px;
+  color: #8aaae5;
 }
 
 .title {
-  color: #8aaae5;
-  align-items: center;
-  justify-content: center;
+  margin-bottom: 20px;
 }
 
 .card {
@@ -58,7 +52,7 @@
   box-shadow: 0 0 0 1px #8aaae5;
 }
 
-#button {
+.button-area button {
   border-color: #8aaae5 !important;
   background-color: #8aaae5 !important;
   align-items: center;

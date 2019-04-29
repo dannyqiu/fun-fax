@@ -4,8 +4,10 @@ import Results from './Results';
 import AdvancedSearch from './AdvancedSearch';
 import SearchBar from './SearchBar';
 import { buildURLQuery } from '../utils';
-const API = "/api/irsystem/search"
-// const API = "/api/irsystem/dummy"
+
+const SEARCH_API = "/api/irsystem/search";
+const RANDOM_API = "/api/irsystem/random";
+// const SEARCH_API = "/api/irsystem/dummy";
 
 class QuerySearch extends React.Component {
   constructor(props) {
@@ -19,34 +21,27 @@ class QuerySearch extends React.Component {
       category: params.get("category"),
       recency: params.get("recency"),
       controversial: params.get("controversial")
-      };
-  
-    this.getInfo = this.getInfo.bind(this);
-  }
-  
-  handleSubmit(event) {
-    this.getInfo()
-    event.preventDefault();
+    };
   }
 
-  /* Uses built-in React method to allow for URL based query. 
+  /* Uses built-in React method to allow for URL based query.
    * window.onpopstate deals with history behvaviors.
    */
   componentDidMount() {
     if (this.state.query !== '') {
-      this.getInfo();
+      this.doSearch();
     }
 
     window.onpopstate = (event) => {
       if (event.state) {
-        this.setState(event.state, this.getInfo);
+        this.setState(event.state, () => this.doSearch());
       }
     }
   }
-  
-  /* Baseline fetch function to return query results from backend. Pushes app history 
+
+  /* Baseline fetch function to return query results from backend. Pushes app history
    * for browser history management */
-  getInfo() {
+  async doSearch() {
     let params = {
       'q': this.state.query,
     };
@@ -59,31 +54,36 @@ class QuerySearch extends React.Component {
     if (this.state.controversial !== null) {
       params['controversial'] = this.state.controversial;
     }
-    let url = buildURLQuery(API, params);
+    let url = buildURLQuery(SEARCH_API, params);
     let displayUrl = buildURLQuery('/', params);
     window.history.pushState(this.state, "", displayUrl);
-    fetch(url, {
+    return fetch(url, {
       method: 'GET'
     })
     .then(response => response.json())
     .then(data => {
       let results = data.data.results;
-      this.setState( {
+      this.setState({
         results: results,
         failedQuery: results.length === 0 ? params.q : null
       });
     });
   }
-  
-  randomSearch() {
-    fetch("/api/irsystem/random", {
-      method: 'GET'
-    })
-    .then(response => response.json())
-    .then(data => {
-      let results = data.data.results;
-      this.setState( {
-        results: results
+
+  async randomSearch() {
+    return this.setState({
+      query: "",
+    }, (newState) => {
+      window.history.pushState(newState, "", '/random');
+      return fetch(RANDOM_API, {
+        method: 'GET'
+      })
+      .then(response => response.json())
+      .then(data => {
+        let results = data.data.results;
+        this.setState({
+          results: results
+        });
       });
     });
   }
@@ -99,37 +99,37 @@ class QuerySearch extends React.Component {
 
   render() {
     return (
-      <div className="mt-2">
-        <form className="active-cyan-3 active-cyan-4 justify-content-center" onSubmit={this.handleSubmit}>
-          <SearchBar 
+      <div className="query-search">
+        <form className="active-cyan-3 active-cyan-4 justify-content-center" onSubmit={e => { this.doSearch(); e.preventDefault(e) }}>
+          <SearchBar
             queryChanged={v => this.setState({ query: v})}
             categoryChanged={v => this.setState({ category: v})}
             query={this.state.query}
             category={this.state.category}
             />
-            <div className="mb-3" />
-            <AdvancedSearch
-              recencyChanged={v => this.setState({ recency: v })}
-              controversialChanged={v => this.setState({ controversial: v })}
-              recency={this.state.recency}
-              controversial={this.state.controversial}
-              advancedChanged={() => this.enableAdvancedSearch()}
-              isAdvancedSearch={this.state.advancedSearch}
-              />
-            <div className="mb-2" />
+          <div className="mb-3" />
+          <AdvancedSearch
+            recencyChanged={v => this.setState({ recency: v })}
+            controversialChanged={v => this.setState({ controversial: v })}
+            recency={this.state.recency}
+            controversial={this.state.controversial}
+            advancedChanged={() => this.enableAdvancedSearch()}
+            isAdvancedSearch={this.state.advancedSearch}
+            />
+          <div className="mb-2" />
           <div className="button-area">
-            <input type="submit" value="Search!" className="btn btn-primary mr-3" id="button" onClick={(e) => this.handleSubmit(e)} /> 
-            <input type="submit" value="Random?" className="btn btn-primary" id="button" onClick={this.randomSearch} />
+            <button type="submit" className="btn btn-primary mr-3">Search!</button>
+            <button type="button" className="btn btn-primary" onClick={() => this.randomSearch()}>Random?</button>
           </div>
         </form>
-      <div className="mt-4">
-        {this.state.failedQuery !== null
-          ? <FailedResults query={this.state.failedQuery} />
-          : <Results results={this.state.results}
-                     seeMoreEngabled={(docID) => console.log(docID)} />
-        }
-      </div>
-    </div> 
+        <div className="mt-4">
+          {this.state.failedQuery !== null
+            ? <FailedResults query={this.state.failedQuery} />
+            : <Results results={this.state.results}
+                      seeMoreEngabled={(docID) => console.log(docID)} />
+          }
+        </div>
+    </div>
     );
   }
 
