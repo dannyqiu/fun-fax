@@ -94,12 +94,13 @@ class WeightedEmbeddingClusteringSearch:
 
         _, best_similarity_idx = np.unique(clustering.labels_, return_index=True)
         if sort_method == "popularity":
-            min_allowed_similarity = np.min(ranked_rankings[best_similarity_idx])
+            min_allowed_similarity = np.min(rankings[rankings_idx[best_similarity_idx]])
             # gives the highest Reddit score doc in each cluster that is above the similarity threshold
-            best_score_doc_id = np.array([
+            best_score_idx = np.array([
                 np.argsort(-np.where((clustering.labels_ == c) & (ranked_rankings >= min_allowed_similarity), ranked_scores, np.nan))[0]
                 for c in range(10)
             ])
+            best_score_doc_id = rankings_idx[best_score_idx]
             return best_score_doc_id[np.argsort(-rankings[best_score_doc_id])]
         else:
             # gives the highest similarity doc in each cluster since top_ranked_em is ordered

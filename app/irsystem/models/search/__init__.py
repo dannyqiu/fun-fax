@@ -20,6 +20,7 @@ REQUIRED_COLUMNS = [
 BANNED_SUBREDDITS = [
     'circlejerk',
     'ShittyTodayILearned',
+    'ShittyYouShouldKnow',
     'TheOnion',
     'WTF',
     'FULLCOMMUNISM',
