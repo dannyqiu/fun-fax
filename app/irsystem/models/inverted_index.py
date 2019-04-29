@@ -5,7 +5,7 @@ from nltk.stem.snowball import EnglishStemmer  # Assuming we're working with Eng
 class InvertedIndex:
     """ Inverted index datastructure """
 
-    def __init__(self, tokenizer=nltk.word_tokenize, stemmer=EnglishStemmer(), stopwords=nltk.corpus.stopwords.words('english')):
+    def __init__(self, tokenizer=nltk.word_tokenize, stemmer=EnglishStemmer(), stopwords=None):
         """
         tokenizer   -- NLTK compatible tokenizer function
         stemmer     -- NLTK compatible stemmer
@@ -16,7 +16,7 @@ class InvertedIndex:
         if stopwords:
             self.stopwords = set(stopwords)
         else:
-            self.stopwords = set()
+            self.stopwords = set(nltk.corpus.stopwords.words('english'))
 
         self.index = defaultdict(list)
 

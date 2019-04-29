@@ -1,4 +1,5 @@
 import os
+import re
 
 from app import app
 
@@ -11,7 +12,23 @@ REQUIRED_COLUMNS = [
     "title",
     "subreddit",
     "permalink",
+    "score",
+    "created_utc"
 ]
+
+BANNED_SUBREDDITS = [
+    'circlejerk',
+    'ShittyTodayILearned',
+    'TheOnion',
+    'WTF',
+    # non-english
+    'Suomi',
+    'BitcoinDK',
+    'BitcoinNO',
+    'brasil',
+]
+
+TOKENIZATION_REGEX = re.compile(r"[a-z]+")
 
 # Bring search models to package level
 from .boolean import BooleanSearch

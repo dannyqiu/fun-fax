@@ -4,7 +4,7 @@ from typing import List, Set
 
 from ..inverted_index import InvertedIndex
 from ..thesaurus import Thesaurus
-from . import FUN_FACT_TITLE_CSV, REQUIRED_COLUMNS
+from . import FUN_FACT_TITLE_CSV, REQUIRED_COLUMNS, TOKENIZATION_REGEX
 
 MAX_SEARCH_TERMS = 8
 
@@ -13,12 +13,11 @@ class BooleanSearch:
     def __init__(self):
         print("Loading thesaurus")
         self.thesaurus = Thesaurus()
-        regex = re.compile("[a-zA-Z]+")
-        self.inv_idx = InvertedIndex(tokenizer=lambda d: regex.findall(d), stemmer=None, stopwords=[])
+        self.inv_idx = InvertedIndex(tokenizer=lambda d: TOKENIZATION_REGEX.findall(d.lower()), stemmer=None, stopwords=[])
         self.index = {}
 
         print("Loading fun fact csv")
-        fun_fact_title_data = pd.read_csv(FUN_FACT_TITLE_CSV).dropna(subset=REQUIRED_COLUMNS)
+        fun_fact_title_data = pd.read_csv(FUN_FACT_TITLE_CSV, usecols=REQUIRED_COLUMNS).dropna()
 
         print("Adding to index")
         for row in fun_fact_title_data.itertuples():
