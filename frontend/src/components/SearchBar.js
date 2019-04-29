@@ -33,7 +33,6 @@ class SearchBar extends Component {
           <option value="lifestyle">Lifestyle</option>
           <option value="technology">Technology</option>
           <option value="humor">Humor</option>
-          <option value="other">Other</option>
         </select>
       </div>
     )
