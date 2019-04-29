@@ -31,6 +31,9 @@ class QuerySearch extends React.Component {
     if (this.state.query !== '') {
       this.doSearch();
     }
+    else if (window.location.pathname === "/random") {
+      this.randomSearch();
+    }
 
     window.onpopstate = (event) => {
       if (event.state) {
