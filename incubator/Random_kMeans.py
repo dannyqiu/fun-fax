@@ -1,7 +1,7 @@
 class WeightedEmbeddingSearch:
 
     def __init__(self):
-        #print("Loading data csv")
+        print("Loading data csv")
         #fun_fact_title_data = pd.read_csv(FUN_FACT_TITLE_CSV).dropna(subset=REQUIRED_COLUMNS)
         til_title_data = pd.read_csv(TIL_TITLE_CSV).dropna(subset=REQUIRED_COLUMNS)
         #ysk_title_data = pd.read_csv(YSK_TITLE_CSV).dropna(subset=REQUIRED_COLUMNS)
@@ -14,7 +14,7 @@ class WeightedEmbeddingSearch:
 
         #print("Computing tf-idf matrix")
         self.vectorizer = TfidfVectorizer(stop_words='english', dtype=np.float32)
-        tfidf_matrix = self.vectorizer.fit_transform(self.title_data["title"])
+        self.tfidf_matrix = self.vectorizer.fit_transform(self.title_data["title"])
 
         #print("Loading spacy")
         self.nlp = spacy.load('en_core_web_lg')
@@ -22,26 +22,25 @@ class WeightedEmbeddingSearch:
         #print("Computing weighted embeddings")
         features = self.vectorizer.get_feature_names()
         self.f_vectors = np.array([self.nlp.vocab[f].vector for f in features])
-        weighted_embeddings = tfidf_matrix.dot(self.f_vectors)
+        weighted_embeddings = self.tfidf_matrix.dot(self.f_vectors)
         assert weighted_embeddings.shape == (len(self.title_data.index), 300)
         self.n_weighted_embeddings = weighted_embeddings / (np.linalg.norm(weighted_embeddings, axis=1)[:, np.newaxis] + EPS)
 
-        #print("Compressing pandas dataframe into index")
-        #self.index = list(title_data.itertuples())
-
         #print("Done loading {} rows".format(len(self.title_data.index)))
-    def random(self,method = 'similarity', top = 10):
-        funfact = self.title_data.iloc[random.randint(0, len(self.title_data))]["title"]
+    def random(self, top = 10):
+        idx = random.randint(0, len(self.title_data))
+        funfact = self.title_data.iloc[idx]["title"]
+        tfidf = self.tfidf_matrix[idx].T.toarray().flatten()
         #print ("fact: " + funfact)
         #results = self.search(funfact, method, top)
         tokens = self.vectorizer.build_analyzer()(funfact)
-        query_tok = [x for x in tokens if random.random() < .5]
+        #query_tok = [x for x in tokens if random.random() < .5]
+        vec_tokens = [x for x in tokens if x in self.vectorizer.vocabulary_]
+        query_tok = [x for x in vec_tokens if np.random.choice([0,1], p=[1- tfidf[self.vectorizer.vocabulary_[x]], tfidf[self.vectorizer.vocabulary_[x]]])]
+        
         rand_query = " ".join(query_tok)
         #print ("rand: " + rand_query)
-        return self.search(rand_query, method, top)
-    
-#     def query(self, query, method = 'similarity', top = 10):
-#         return self.search(query, method, top)
+        return self.search(rand_query, "score", top)
     
     def search(self, query, method = 'similarity', top=10):
         query_tfidf = self.vectorizer.transform([query])
