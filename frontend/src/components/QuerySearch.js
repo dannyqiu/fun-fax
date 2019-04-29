@@ -103,7 +103,9 @@ class QuerySearch extends React.Component {
   render() {
     return (
       <div className="query-search">
-        <form className="active-cyan-3 active-cyan-4 justify-content-center" onSubmit={e => { this.doSearch(); e.preventDefault(e) }}>
+        <form className="active-cyan-3 active-cyan-4 justify-content-center"
+              onSubmit={e => { this.doSearch(); e.preventDefault(e) }}
+              autocomplete="off">
           <SearchBar
             queryChanged={v => this.setState({ query: v})}
             categoryChanged={v => this.setState({ category: v})}
