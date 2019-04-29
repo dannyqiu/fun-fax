@@ -21,6 +21,7 @@ const FactCard = (props) => {
           </div>
         </div>
         <div className="col-2">
+          <p>{props.time}</p>
           {/* <img className="fact-picture mt-2 justify-content-center" src={"https://media.wired.com/photos/5b8999943667562d3024c321/master/w_1164,c_limit/trash2-01.jpg"} alt="Piction in question"></img> */}
           {props.imgURL && (
             <img className="fact-picture mt-2 justify-content-center" src={props.imgURL} alt="Piction in question"></img>

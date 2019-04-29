@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import FactCard from './FactCard'
+import moment from 'moment';
 
 class Results extends Component {
 
@@ -15,8 +16,9 @@ class Results extends Component {
             permalink={`https://reddit.com${result.permalink}`}
             subreddit={result.subreddit}
             score={result.score}
-            comments={result.comments}
+            comments={result.num_comments}
             imgURL={result.imgURL}
+            time={moment.unix(result.created_utc).fromNow()}
             seeMoreEnabled={(docID) => this.props.seeMoreEnabled(docID)}
             />
       ))}

@@ -1,9 +1,9 @@
 import React from 'react';
 
 /* Renders failed query HTML */
-const FailedResults = (props) => (
+const FailedResults = () => (
   <div className="failed">
-    <p>{`${props.query} returned 0 results. Please specify a different query.`}</p>
+    <p>No results found. Please specify a different query.</p>
   </div>
 );
 

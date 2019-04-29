@@ -63,6 +63,7 @@ class QuerySearch extends React.Component {
     .then(response => response.json())
     .then(data => {
       let results = data.data.results;
+      console.log(results);
       this.setState({
         results: results,
         failedQuery: results.length === 0 ? params.q : null
@@ -81,8 +82,10 @@ class QuerySearch extends React.Component {
       .then(response => response.json())
       .then(data => {
         let results = data.data.results;
+        console.log(results);
         this.setState({
-          results: results
+          results: results,
+          failedQuery: null
         });
       });
     });
