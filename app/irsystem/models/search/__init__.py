@@ -13,7 +13,8 @@ REQUIRED_COLUMNS = [
     "subreddit",
     "permalink",
     "score",
-    "created_utc"
+    "created_utc",
+    "num_comments",
 ]
 
 BANNED_SUBREDDITS = [
@@ -34,3 +35,4 @@ TOKENIZATION_REGEX = re.compile(r"[a-z]+")
 from .boolean import BooleanSearch
 from .dummy import DummySearch
 from .weighted_embedding import WeightedEmbeddingSearch
+from .weighted_embedding_clustering import WeightedEmbeddingClusteringSearch
