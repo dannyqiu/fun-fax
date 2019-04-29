@@ -1,9 +1,10 @@
 .App {
   text-align: center;
+  background-color: #efefef;
 }
 
 .App-header {
-  background-color: #ffffff;
+  background-color: #efefef;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,16 +23,30 @@
   justify-content: center;
 }
 
-.fact {
-  font-size: calc(10px + 1vmin);
-  padding: 5px;
-  border-style: solid;
-  border: #61dafb;
-  border-radius: 5px;
+.card {
+  width: 60%;
+  margin: 0 auto;
+  float: none;
+  margin-bottom: 10px;
 }
 
-.list-group-item {
-  font-size: .75em;
+#see-more {
+  width: 40%;
+  margin: 0 auto;
+  float: none;
+}
+
+#fact {
+  font-size: 1.25em;
+}
+
+.fact-picture {
+  height: 100%;
+  width: 100%;
+}
+
+.container {
+  width: 65%;
 }
 
 .active-cyan-4 input[type=text]:focus:not([readonly]) {

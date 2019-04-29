@@ -5,6 +5,7 @@ import AdvancedSearch from './AdvancedSearch';
 import SearchBar from './SearchBar';
 import { buildURLQuery } from '../utils';
 const API = "/api/irsystem/search"
+// const API = "/api/irsystem/dummy"
 
 class QuerySearch extends React.Component {
   constructor(props) {
@@ -74,6 +75,19 @@ class QuerySearch extends React.Component {
     });
   }
   
+  randomSearch() {
+    fetch("/api/irsystem/random", {
+      method: 'GET'
+    })
+    .then(response => response.json())
+    .then(data => {
+      let results = data.data.results;
+      this.setState( {
+        results: results
+      });
+    });
+  }
+
   /* Enables advanced searching slider */
   enableAdvancedSearch() {
     this.setState((prevState) => ({
@@ -105,13 +119,14 @@ class QuerySearch extends React.Component {
             <div className="mb-2" />
           <div className="button-area">
             <input type="submit" value="Search!" className="btn btn-primary mr-3" id="button" onClick={(e) => this.handleSubmit(e)} /> 
-            <input type="submit" disabled={true}  value="Random?" className="btn btn-primary" id="button" onClick={this.randomSearch} />
+            <input type="submit" value="Random?" className="btn btn-primary" id="button" onClick={this.randomSearch} />
           </div>
         </form>
       <div className="mt-4">
         {this.state.failedQuery !== null
           ? <FailedResults query={this.state.failedQuery} />
-          : <Results results={this.state.results} />
+          : <Results results={this.state.results}
+                     seeMoreEngabled={(docID) => console.log(docID)} />
         }
       </div>
     </div> 
