@@ -17,6 +17,10 @@ REQUIRED_COLUMNS = [
     "num_comments",
 ]
 
+OPTIONAL_COLUMNS = [
+    "thumbnail",
+]
+
 BANNED_SUBREDDITS = [
     'circlejerk',
     'ShittyTodayILearned',

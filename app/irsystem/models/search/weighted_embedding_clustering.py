@@ -10,19 +10,20 @@ from enum import Enum
 from typing import List
 
 from . import FUN_FACT_TITLE_CSV, TIL_TITLE_CSV, YSK_TITLE_CSV
-from . import REQUIRED_COLUMNS, BANNED_SUBREDDITS, TOKENIZATION_REGEX
+from . import REQUIRED_COLUMNS, OPTIONAL_COLUMNS, BANNED_SUBREDDITS, TOKENIZATION_REGEX
 from ..utils import normalize_range, encode_numpy_array
 
 EPS = 1e-6
-ENTROPY_FACTOR = 0.1
+ENTROPY_FACTOR = 0.125
 
 class WeightedEmbeddingClusteringSearch:
 
     def __init__(self):
         print("Loading data csv")
-        fun_fact_title_data = pd.read_csv(FUN_FACT_TITLE_CSV, usecols=REQUIRED_COLUMNS).dropna()
-        til_title_data = pd.read_csv(TIL_TITLE_CSV, usecols=REQUIRED_COLUMNS).dropna()
-        ysk_title_data = pd.read_csv(YSK_TITLE_CSV, usecols=REQUIRED_COLUMNS).dropna()
+        usecols = set(REQUIRED_COLUMNS + OPTIONAL_COLUMNS)
+        fun_fact_title_data = pd.read_csv(FUN_FACT_TITLE_CSV, usecols=usecols).dropna(subset=REQUIRED_COLUMNS)
+        til_title_data = pd.read_csv(TIL_TITLE_CSV, usecols=usecols).dropna(subset=REQUIRED_COLUMNS)
+        ysk_title_data = pd.read_csv(YSK_TITLE_CSV, usecols=usecols).dropna(subset=REQUIRED_COLUMNS)
 
         title_data = pd.concat([
             fun_fact_title_data,
@@ -161,6 +162,7 @@ class WeightedEmbeddingClusteringSearch:
                 "score": self.index[d].score,
                 "num_comments": self.index[d].num_comments,
                 "created_utc": self.index[d].created_utc,
+                "thumbnail": self.index[d].thumbnail,
                 "see_more_query_vector": encode_numpy_array(r),
             }
             for d, r in zip(doc_ids, rocchios)
