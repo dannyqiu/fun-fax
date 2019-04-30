@@ -119,9 +119,14 @@ class WeightedEmbeddingClusteringSearch:
             return new_em
         return np.array([_rocchio_helper(i) for i in doc_ids])
 
-    def _search_helper(self, query_embedding, sort_method: str, recency_sort: str, top: int):
+    def _search_helper(self, query_embedding, category, sort_method: str, recency_sort: str, top: int):
         n_query_embedding = query_embedding / (np.linalg.norm(query_embedding) + EPS)
         rankings = (1 - ENTROPY_FACTOR) * self.n_weighted_embeddings.dot(n_query_embedding) + ENTROPY_FACTOR * self.entropy
+        if category:
+            category_embedding = self.nlp.vocab[category].vector
+            assert np.count_nonzero(category_embedding) > 0
+            n_category_embedding = category_embedding / np.linalg.norm(category_embedding)
+            rankings *= self.n_weighted_embeddings.dot(n_category_embedding)
         if recency_sort is not None:
             if recency_sort == "new":
                 rankings *= self.p_new_dates
@@ -131,17 +136,17 @@ class WeightedEmbeddingClusteringSearch:
         rocchios = self._compute_rocchio(query_embedding, doc_ids)
         return self._format_results(doc_ids, rocchios)
 
-    def search(self, query, sort_method: str="relevancy", recency_sort: str=None, top: int=10):
+    def search(self, query, category, sort_method: str="relevancy", recency_sort: str=None, top: int=10):
         query_weighted = self._compute_query_embedding(query)
         # if we have no embeddings for the given query, we're out of luck
         if np.count_nonzero(query_weighted) == 0:
             return []
-        return self._search_helper(query_weighted, sort_method, recency_sort, top)
+        return self._search_helper(query_weighted, category, sort_method, recency_sort, top)
 
-    def see_more(self, query_embedding, sort_method: str="relevancy", recency_sort: str=None, top: int=10):
-        return self._search_helper(query_embedding, sort_method, recency_sort, top)
+    def see_more(self, query_embedding, category, sort_method: str="relevancy", recency_sort: str=None, top: int=10):
+        return self._search_helper(query_embedding, category, sort_method, recency_sort, top)
 
-    def random(self):
+    def random(self, category):
         sample_docs = [d.title for d in random.sample(self.index, k=1)]
         sample_tfidf_matrix = self.vectorizer.transform(sample_docs)
         features = self.vectorizer.get_feature_names()
@@ -149,7 +154,7 @@ class WeightedEmbeddingClusteringSearch:
         for r, c in zip(*sample_tfidf_matrix.nonzero()):
             if sample_tfidf_matrix[r, c] > np.random.random():
                 words.add(features[c])
-        return self.search(" ".join(words), sort_method="popularity")
+        return self.search(" ".join(words), category, sort_method="popularity")
 
     def _format_results(self, doc_ids: List[int], rocchios):
         results = [

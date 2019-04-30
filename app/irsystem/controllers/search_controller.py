@@ -14,7 +14,7 @@ def search():
         category = request.args.get('category', default=None)
         sort_method = request.args.get('sort', default="similarity")
         recency_sort = request.args.get('recency', default=None)
-        results = search_model.search(query, sort_method=sort_method, recency_sort=recency_sort)
+        results = search_model.search(query, category, sort_method=sort_method, recency_sort=recency_sort)
     else:
         results = []
     return http_resource(results, "results", True)
@@ -28,14 +28,15 @@ def see_more():
         category = request.args.get('category', default=None)
         sort_method = request.args.get('sort', default="similarity")
         recency_sort = request.args.get('recency', default=None)
-        results = search_model.see_more(query_vector, sort_method=sort_method, recency_sort=recency_sort)
+        results = search_model.see_more(query_vector, category, sort_method=sort_method, recency_sort=recency_sort)
     else:
         results = []
     return http_resource(results, "results", True)
 
 @irsystem.route('/random', methods=['GET'])
 def random():
-    results = search_model.random()
+    category = request.args.get('category', default=None)
+    results = search_model.random(category)
     return http_resource(results, "results", True)
 
 
