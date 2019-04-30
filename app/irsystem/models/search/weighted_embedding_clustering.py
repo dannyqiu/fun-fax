@@ -12,6 +12,7 @@ from typing import List
 from . import FUN_FACT_TITLE_CSV, TIL_TITLE_CSV, YSK_TITLE_CSV
 from . import REQUIRED_COLUMNS, OPTIONAL_COLUMNS, BANNED_SUBREDDITS, TOKENIZATION_REGEX
 from ..utils import normalize_range, encode_numpy_array
+from ..category import CATEGORY_TERMS
 
 EPS = 1e-6
 ENTROPY_FACTOR = 0.125
@@ -62,6 +63,12 @@ class WeightedEmbeddingClusteringSearch:
         print("Compressing pandas dataframe into index")
         self.index = list(title_data.itertuples())
         self.scores = title_data['score'].astype(np.int).to_numpy()
+
+        print("Computing category vectors")
+        self.category_vectors = {
+            k: np.average([self.nlp.vocab[w].vector for w in v + [k]], axis=0)
+            for k, v in CATEGORY_TERMS.items()
+        }
 
         print("Done loading {} rows".format(len(title_data.index)))
 
@@ -124,8 +131,8 @@ class WeightedEmbeddingClusteringSearch:
     def _search_helper(self, query_embedding, category, sort_method: str, recency_sort: str, top: int):
         n_query_embedding = query_embedding / (np.linalg.norm(query_embedding) + EPS)
         rankings = (1 - ENTROPY_FACTOR) * self.n_weighted_embeddings.dot(n_query_embedding) + ENTROPY_FACTOR * self.entropy
-        if category:
-            category_embedding = self.nlp.vocab[category].vector
+        if category in self.category_vectors:
+            category_embedding = self.category_vectors[category]
             assert np.count_nonzero(category_embedding) > 0
             n_category_embedding = category_embedding / np.linalg.norm(category_embedding)
             rankings *= self.n_weighted_embeddings.dot(n_category_embedding)
