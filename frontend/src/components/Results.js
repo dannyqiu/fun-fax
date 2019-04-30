@@ -7,7 +7,7 @@ class Results extends Component {
   /* Result rendering function, feeds props to FactCard component */
   render() {
     return (
-      <div className="results">
+      <div className="results container">
       {this.props.results.map(result => (
           <FactCard
             key={result.permalink}

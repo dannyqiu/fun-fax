@@ -4,74 +4,56 @@ html, body {
   background-color: #efefef !important;
 }
 
+.query-search {
+  padding-bottom: 20px;
+}
+
 .App {
   text-align: center;
 }
 
 .App-header {
   margin-top: 100px;
-  color: #8aaae5;
+  color: #6aaae5;
 }
 
 .title {
   margin-bottom: 20px;
 }
 
+.results {
+  max-width: 1060px;
+}
+
 .card {
-  width: 60%;
-  margin: 0 auto;
-  float: none;
-  margin-bottom: 10px;
-}
-
-#see-more {
-  width: 100%;
-}
-
-#fact {
-  font-size: 1.25em;
-}
-
-.fact-picture {
-  height: auto;
-  width: 100%;
-}
-
-.container {
-  width: 65%;
+  margin-bottom: .75rem;
 }
 
 .card-body {
-  padding: .75rem !important;
+  text-align: left;
+  padding: 1rem 1.25rem;
 }
 
-.gray-text {
+.fact-title {
+  font-weight: 400;
+  margin-bottom: .75rem;
+}
+
+.fact-subreddit, .fact-time {
   color: gray;
 }
 
-.active-cyan-4 input[type=text]:focus:not([readonly]) {
-  border: 1px solid #8aaae5;
-  box-shadow: 0 0 0 1px #8aaae5;
-}
-.active-cyan-3 input[type=text] {
-  border: 1px solid #8aaae5;
-  box-shadow: 0 0 0 1px #8aaae5;
+.fact-picture {
+  margin-top: .5rem;
+  height: auto;
+  width: 90%;
 }
 
 .button-area button {
-  border-color: #8aaae5 !important;
-  background-color: #8aaae5 !important;
+  border-color: #6aaae5 !important;
+  background-color: #6aaae5 !important;
   align-items: center;
   justify-content: center;
-}
-
-.active-cyan-2 input[type=text]:focus:not([readonly]) {
-  border-bottom: 1px solid #4dd0e1;
-  box-shadow: 0 1px 0 0 #4dd0e1;
-}
-.active-cyan input[type=text] {
-  border-bottom: 1px solid #4dd0e1;
-  box-shadow: 0 1px 0 0 #4dd0e1;
 }
 
 .noselect {

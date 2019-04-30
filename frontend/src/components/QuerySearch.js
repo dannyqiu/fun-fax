@@ -78,8 +78,14 @@ class QuerySearch extends React.Component {
     return this.setState({
       query: "",
     }, (newState) => {
-      window.history.pushState(newState, "", '/random');
-      return fetch(RANDOM_API, {
+      let params = {};
+      if (this.state.category !== null) {
+        params['category'] = this.state.category;
+      }
+      let url = buildURLQuery(RANDOM_API, params);
+      let displayUrl = buildURLQuery ('/random', params);
+      window.history.pushState(newState, "", displayUrl);
+      return fetch(url, {
         method: 'GET'
       })
       .then(response => response.json())
@@ -122,7 +128,7 @@ class QuerySearch extends React.Component {
   render() {
     return (
       <div className="query-search">
-        <form className="active-cyan-3 active-cyan-4 justify-content-center"
+        <form className="justify-content-center"
               onSubmit={e => { this.doSearch(); e.preventDefault(e) }}
               autoComplete="off">
           <SearchBar
