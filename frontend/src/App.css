@@ -47,6 +47,10 @@ html, body {
   padding: .75rem !important;
 }
 
+.gray-text {
+  color: gray;
+}
+
 .active-cyan-4 input[type=text]:focus:not([readonly]) {
   border: 1px solid #8aaae5;
   box-shadow: 0 0 0 1px #8aaae5;

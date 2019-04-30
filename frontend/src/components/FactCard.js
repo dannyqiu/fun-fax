@@ -6,10 +6,10 @@ const FactCard = (props) => {
       <div className="card-body">
         <div className="row">
           <div className="col-10">
-          <p className="text-left"><a className="card-text mb-2" target="_blank" rel="noopener noreferrer" id="fact" href={props.permalink}>{props.title}</a></p>
+          <p className="text-left"><a className="card-text" target="_blank" rel="noopener noreferrer" id="fact" href={props.permalink}>{props.title}</a></p>
           <div className="row">
             <div className="col-3">
-              <p className="text-left">r/{props.subreddit}</p>
+              <p className="text-left gray-text">r/{props.subreddit}</p>
             </div>
             <div className="col-3"></div>
             <div className="col-4">
@@ -18,7 +18,7 @@ const FactCard = (props) => {
           </div>
         </div>
         <div className="col-2">
-          <p>{props.time}</p>
+          <p className="gray-text">{props.time}</p>
           {props.imgURL && (
             <img className="fact-picture mt-2 justify-content-center" src={props.imgURL} alt="Piction in question"></img>
             )}
