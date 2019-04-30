@@ -152,7 +152,7 @@ class WeightedEmbeddingClusteringSearch:
         features = self.vectorizer.get_feature_names()
         words = set()
         for r, c in zip(*sample_tfidf_matrix.nonzero()):
-            if sample_tfidf_matrix[r, c] > np.random.random():
+            if sample_tfidf_matrix[r, c] > np.random.random() or not words:
                 words.add(features[c])
         return self.search(" ".join(words), category, sort_method="popularity")
 
