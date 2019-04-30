@@ -12,7 +12,7 @@ class AdvancedSearch extends Component {
                  checked={this.props.isAdvancedSearch}
                  onChange={() => this.props.advancedChanged()}>
           </input>
-          <label className="custom-control-label" htmlFor="advancedSearchToggle">Toggle Advanced Search</label>
+          <label className="custom-control-label noselect" htmlFor="advancedSearchToggle">Toggle Advanced Search</label>
         </div>
         {this.props.isAdvancedSearch && (
           <div className="sorting-area form-inline justify-content-center">
@@ -20,8 +20,8 @@ class AdvancedSearch extends Component {
             <select name="recency"
                     className="form-control form-control-sm mr-2"
                     value={this.props.recency || ''}
-                    onChange={e => {this.props.recencyChanged(e.target.value)}}>
-              <option value={null}></option>
+                    onChange={e => {this.props.recencyChanged(e.target.value === "" ? null : e.target.value)}}>
+              <option value=""></option>
               <option value="new">Newest to Oldest</option>
               <option value="old">Oldest to Newest</option>
             </select>
@@ -30,8 +30,8 @@ class AdvancedSearch extends Component {
             <select name="sort"
                     className="form-control form-control-sm"
                     value={this.props.sort || ''}
-                    onChange={e => {this.props.sortChanged(e.target.value)}}>
-              <option value={null}></option>
+                    onChange={e => {this.props.sortChanged(e.target.value === "" ? null : e.target.value)}}>
+              <option value=""></option>
               <option value="relevancy">Relevancy</option>
               <option value="popularity">Popularity</option>
             </select>

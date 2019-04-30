@@ -19,17 +19,20 @@ class SearchBar extends Component {
                  aria-describedby="queryInput"
                  value={this.props.query}
                  onChange={e => {this.props.queryChanged(e.target.value)}}
-              />
+                 autoComplete="off"
+                 />
         </div>
         <select className="selectpicker form-control"
                 name="category"
                 value={this.props.category || ''}
-                onChange={e => {this.props.categoryChanged(e.target.value)}}
+                onChange={e => {this.props.categoryChanged(e.target.value === "" ? null : e.target.value)}}
                 >
           <option value="">General</option>
-          <option value="sports">Educational</option>
+          <option value="discussion">Discussion</option>
+          <option value="education">Educational</option>
           <option value="entertainment">Entertainment</option>
           <option value="lifestyle">Lifestyle</option>
+          <option value="sports">Sports</option>
           <option value="technology">Technology</option>
           <option value="humor">Humor</option>
         </select>

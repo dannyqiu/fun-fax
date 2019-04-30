@@ -140,7 +140,7 @@ class QuerySearch extends React.Component {
             advancedChanged={() => this.enableAdvancedSearch()}
             isAdvancedSearch={this.state.advancedSearch}
             />
-          <div className="mb-2" />
+          <div className="mb-3" />
           <div className="button-area">
             <button type="submit" className="btn btn-primary mr-3">Search!</button>
             <button type="button" className="btn btn-primary" onClick={() => this.randomSearch()}>Random?</button>
