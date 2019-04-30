@@ -31,6 +31,8 @@ class WeightedEmbeddingClusteringSearch:
             ysk_title_data,
         ], join='inner')
         title_data = title_data[~title_data['subreddit'].isin(BANNED_SUBREDDITS)]
+        # most documents with a significant number of hashtags are spam
+        title_data = title_data[~title_data['title'].astype(str).apply(lambda t: t.count('#') > 4)]
         title_data = title_data.reset_index(drop=True)
 
         print("Computing tf-idf matrix")
