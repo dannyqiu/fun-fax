@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, request
 base = Blueprint('index', __name__, url_prefix='/',static_folder='static',template_folder='templates')
 
 @base.route('/', methods=['GET'])
+@base.route('/random', methods=['GET'])
 def index():
     return render_template('index.html')
 
