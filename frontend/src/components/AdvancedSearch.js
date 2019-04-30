@@ -16,14 +16,14 @@ class AdvancedSearch extends Component {
         </div>
         {this.props.isAdvancedSearch && (
           <div className="sorting-area form-inline justify-content-center">
-            <span className="mr-1">Recency:</span>
+            <span className="mr-1">Recency preference:</span>
             <select name="recency"
                     className="form-control form-control-sm mr-2"
                     value={this.props.recency || ''}
                     onChange={e => {this.props.recencyChanged(e.target.value === "" ? null : e.target.value)}}>
               <option value=""></option>
-              <option value="new">Newest to Oldest</option>
-              <option value="old">Oldest to Newest</option>
+              <option value="new">Newer</option>
+              <option value="old">Older</option>
             </select>
 
             <span className="mr-1">Sort Preference:</span>
