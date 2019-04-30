@@ -102,7 +102,7 @@ class WeightedEmbeddingClusteringSearch:
                 for c in range(10)
             ])
             best_score_doc_id = rankings_idx[best_score_idx]
-            return best_score_doc_id[np.argsort(-rankings[best_score_doc_id])]
+            return best_score_doc_id[np.argsort(-self.scores[best_score_doc_id])]
         else:
             # gives the highest similarity doc in each cluster since top_ranked_em is ordered
             best_similarity_doc_id = rankings_idx[best_similarity_idx]
