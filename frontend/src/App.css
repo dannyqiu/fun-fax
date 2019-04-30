@@ -25,9 +25,7 @@ html, body {
 }
 
 #see-more {
-  width: 20%;
-  margin: 0 auto;
-  float: none;
+  width: 100%;
 }
 
 #fact {
@@ -35,7 +33,7 @@ html, body {
 }
 
 .fact-picture {
-  height: 100%;
+  height: auto;
   width: 100%;
 }
 

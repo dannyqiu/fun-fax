@@ -11,26 +11,25 @@ const FactCard = (props) => {
             <div className="col-3">
               <p className="text-left gray-text">r/{props.subreddit}</p>
             </div>
-            <div className="col-3"></div>
             <div className="col-4">
-              <p className="text-left score">{props.score} ⭐️'s  |  {props.comments} 💬's</p>
+              <p className="text-left score">{props.score} <i className="fas fa-heart"></i>&nbsp;&nbsp;|&nbsp;&nbsp;{props.comments} <i className="fas fa-comments"></i> </p>
+            </div>
+            <div className="col-4">
+              <button type="button"
+                      className="btn btn-outline-primary btn-small"
+                      onClick={() => props.seeMoreClicked()}
+                      >
+                    See Similar Queries
+              </button>
             </div>
           </div>
         </div>
         <div className="col-2">
           <p className="gray-text">{props.time}</p>
-          {props.imgURL && (
-            <img className="fact-picture mt-2 justify-content-center" src={props.imgURL} alt="Piction in question"></img>
+          {props.thumbnail.startsWith("http") && (
+            <img className="fact-picture" src={props.thumbnail}></img>
             )}
         </div>
-
-        <button id="see-more"
-                type="button"
-                className="btn btn-outline-primary btn-small mt-1 mb-1"
-                onClick={() => props.seeMoreClicked()}
-                >
-              See Similar Queries
-        </button>
         </div>
       </div>
     </div>
