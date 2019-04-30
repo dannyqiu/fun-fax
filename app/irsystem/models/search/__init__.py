@@ -34,6 +34,10 @@ BANNED_SUBREDDITS = [
     'BitcoinDK',
     'BitcoinNO',
     'brasil',
+    'greece',
+    'novotvorenice'
+    'mkd',
+    'Romania',
 ]
 
 TOKENIZATION_REGEX = re.compile(r"[a-z]+")

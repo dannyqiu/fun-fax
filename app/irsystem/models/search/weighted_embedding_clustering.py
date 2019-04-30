@@ -67,7 +67,7 @@ class WeightedEmbeddingClusteringSearch:
         sparse_logs = tfidf.copy()
         sparse_logs.data = np.log(sparse_logs.data)
         entropy = -(tfidf.multiply(sparse_logs)).sum(axis=1)
-        entropy = np.minimum(1, np.log(np.asarray(entropy).flatten() + 1))
+        entropy = np.minimum(2, np.log(np.asarray(entropy).flatten() + 1))
         return entropy
 
     def _compute_query_embedding(self, query):
@@ -121,8 +121,7 @@ class WeightedEmbeddingClusteringSearch:
 
     def _search_helper(self, query_embedding, sort_method: str, recency_sort: str, top: int):
         n_query_embedding = query_embedding / (np.linalg.norm(query_embedding) + EPS)
-        rankings = self.n_weighted_embeddings.dot(n_query_embedding)
-        rankings += ENTROPY_FACTOR * self.entropy
+        rankings = (1 - ENTROPY_FACTOR) * self.n_weighted_embeddings.dot(n_query_embedding) + ENTROPY_FACTOR * self.entropy
         if recency_sort is not None:
             if recency_sort == "new":
                 rankings *= self.p_new_dates
