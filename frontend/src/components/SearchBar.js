@@ -27,7 +27,6 @@ class SearchBar extends Component {
                 onChange={e => {this.props.categoryChanged(e.target.value)}}
                 >
           <option value="">General</option>
-          <option value="discussion">Discussion</option>
           <option value="sports">Educational</option>
           <option value="entertainment">Entertainment</option>
           <option value="lifestyle">Lifestyle</option>
