@@ -12,7 +12,7 @@ def search():
     query = request.args.get('q', default=None)
     if query:
         category = request.args.get('category', default=None)
-        sort_method = request.args.get('sort', default="similarity")
+        sort_method = request.args.get('sort', default="relevancy")
         recency_sort = request.args.get('recency', default=None)
         results = search_model.search(query, category, sort_method=sort_method, recency_sort=recency_sort)
     else:
@@ -26,7 +26,7 @@ def see_more():
         query_vector = decode_numpy_array(query)
         # TODO: implement category
         category = request.args.get('category', default=None)
-        sort_method = request.args.get('sort', default="similarity")
+        sort_method = request.args.get('sort', default="relevancy")
         recency_sort = request.args.get('recency', default=None)
         results = search_model.see_more(query_vector, category, sort_method=sort_method, recency_sort=recency_sort)
     else:
