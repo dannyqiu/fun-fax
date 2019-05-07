@@ -30,13 +30,13 @@ def see_more():
         results, words = search_model.see_more(query_vector, category, sort_method=sort_method, recency_sort=recency_sort)
     else:
         results, words = [], []
-    return http_resource(results, "results", words, "words", True)
+    return http_resource2(results, "results", words, "words", True)
 
 @irsystem.route('/random', methods=['GET'])
 def random():
     category = request.args.get('category', default=None)
     results, words = search_model.random(category)
-    return http_resource(results, "results", words, "words", True)
+    return http_resource2(results, "results", words, "words", True)
 
 
 from ..models.search import DummySearch
