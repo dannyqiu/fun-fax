@@ -17,6 +17,7 @@ class QuerySearch extends React.Component {
     this.state = {
       query: params.get('q') || '',
       results: [],
+      words: [],
       failedQuery: null,
       advancedSearch: params.get("recency") !== null || params.get("sort") !== null,
       category: params.get("category"),
@@ -66,9 +67,10 @@ class QuerySearch extends React.Component {
     })
     .then(response => response.json())
     .then(data => {
-      let results = data.data.results;
+      let { results, words } = data.data;
       this.setState({
         results: results,
+        words: words,
         failedQuery: results.length === 0 ? params.q : null
       });
     });
@@ -90,9 +92,10 @@ class QuerySearch extends React.Component {
       })
       .then(response => response.json())
       .then(data => {
-        let results = data.data.results;
+        let { results, words } = data.data;
         this.setState({
           results: results,
+          words: words,
           failedQuery: null
         });
       });
@@ -108,9 +111,10 @@ class QuerySearch extends React.Component {
     })
     .then(response => response.json())
     .then(data => {
-      let results = data.data.results;
+      let { results, words } = data.data;
       this.setState({
         results: results,
+        words: words,
         failedQuery: null
       });
     });
@@ -156,6 +160,7 @@ class QuerySearch extends React.Component {
           {this.state.failedQuery !== null
             ? <FailedResults query={this.state.failedQuery} />
             : <Results results={this.state.results}
+                       words={this.state.words}
                        seeMoreClicked={q => this.seeMore(q)} />
           }
         </div>

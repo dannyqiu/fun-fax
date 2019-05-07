@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import FactCard from './FactCard'
+import Words from './Words'
 import moment from 'moment';
 
 class Results extends Component {
@@ -8,7 +9,10 @@ class Results extends Component {
   render() {
     return (
       <div className="results container">
-      {this.props.results.map(result => (
+          <Words
+            words={this.props.words}
+          />
+        {this.props.results.map(result => (
           <FactCard
             key={result.permalink}
             title={result.title}
@@ -21,7 +25,7 @@ class Results extends Component {
             time={moment.unix(result.created_utc).fromNow()}
             seeMoreClicked={() => this.props.seeMoreClicked(result.see_more_query_vector)}
             />
-      ))}
+        ))}
       </div>
     );
   }

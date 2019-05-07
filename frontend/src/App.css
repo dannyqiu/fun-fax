@@ -31,6 +31,17 @@ html, body {
   max-width: 1060px;
 }
 
+.badge {
+  background-color: white;
+  color: #6aaae5;
+  padding: .6em;
+  font-size: 85%;
+}
+
+.words {
+  text-align: left;
+}
+
 .card {
   margin-bottom: .75rem;
 }
