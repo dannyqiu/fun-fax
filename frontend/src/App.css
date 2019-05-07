@@ -17,6 +17,12 @@ html, body {
   color: #6aaae5;
 }
 
+.nav {
+  position: fixed;
+  left: 10px;
+  top: 5px;
+}
+
 .title {
   margin-bottom: 20px;
 }
