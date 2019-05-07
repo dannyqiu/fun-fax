@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import './App.css';
 
 class About extends Component {
@@ -7,7 +7,7 @@ class About extends Component {
     return (
       <div className="App">
         <div className="nav">
-          <Link to="/"><i class="fas fa-igloo"/> Home</Link>
+          <Link to="/"><i className="fas fa-igloo"/> Home</Link>
         </div>
         <header className="App-header">
           <h1 className="title">What is Fun Fax?</h1>

@@ -1,11 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import App from './App';
 import About from './About';
 import * as serviceWorker from './serviceWorker';
-import { BrowserRouter, Route } from 'react-router-dom';
 import './index.css';
-import { Switch } from 'react-router';
 
 ReactDOM.render(
   <BrowserRouter>
