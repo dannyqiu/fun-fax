@@ -14,10 +14,10 @@ def search():
         category = request.args.get('category', default=None)
         sort_method = request.args.get('sort', default="relevancy")
         recency_sort = request.args.get('recency', default=None)
-        results = search_model.search(query, category, sort_method=sort_method, recency_sort=recency_sort)
+        results, words = search_model.search(query, category, sort_method=sort_method, recency_sort=recency_sort)
     else:
-        results = []
-    return http_resource(results, "results", True)
+        results, words = [], []
+    return http_resource2(results, "results", words, "words", True)
 
 @irsystem.route('/more', methods=['GET'])
 def see_more():
@@ -27,16 +27,16 @@ def see_more():
         category = request.args.get('category', default=None)
         sort_method = request.args.get('sort', default="relevancy")
         recency_sort = request.args.get('recency', default=None)
-        results = search_model.see_more(query_vector, category, sort_method=sort_method, recency_sort=recency_sort)
+        results, words = search_model.see_more(query_vector, category, sort_method=sort_method, recency_sort=recency_sort)
     else:
-        results = []
-    return http_resource(results, "results", True)
+        results, words = [], []
+    return http_resource(results, "results", words, "words", True)
 
 @irsystem.route('/random', methods=['GET'])
 def random():
     category = request.args.get('category', default=None)
-    results = search_model.random(category)
-    return http_resource(results, "results", True)
+    results, words = search_model.random(category)
+    return http_resource(results, "results", words, "words", True)
 
 
 from ..models.search import DummySearch

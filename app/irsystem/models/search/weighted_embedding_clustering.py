@@ -7,12 +7,13 @@ import scipy
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import SpectralClustering
 from enum import Enum
-from typing import List
+from typing import List, Tuple
 
 from . import FUN_FACT_TITLE_CSV, TIL_TITLE_CSV, YSK_TITLE_CSV
 from . import REQUIRED_COLUMNS, OPTIONAL_COLUMNS, BANNED_SUBREDDITS, TOKENIZATION_REGEX
-from ..utils import normalize_range, encode_numpy_array
 from ..category import CATEGORY_TERMS
+from ..thesaurus import Thesaurus
+from ..utils import normalize_range, encode_numpy_array
 
 EPS = 1e-6
 ENTROPY_FACTOR = 0.125
@@ -69,6 +70,9 @@ class WeightedEmbeddingClusteringSearch:
             k: np.average([self.nlp.vocab[w].vector for w in v + [k]], axis=0)
             for k, v in CATEGORY_TERMS.items()
         }
+
+        print("Initializing thesaurus")
+        self.thesaurus = Thesaurus(nlp=self.nlp)
 
         print("Done loading {} rows".format(len(title_data.index)))
 
@@ -128,7 +132,15 @@ class WeightedEmbeddingClusteringSearch:
             return new_em
         return np.array([_rocchio_helper(i) for i in doc_ids])
 
-    def _search_helper(self, query_embedding, category: str, sort_method: str, recency_sort: str, top: int):
+    def _explain_words(self, query_embedding, doc_ids, top=10):
+        similar_words = self.thesaurus.most_similar_by_embedding(query_embedding, top=top*2)
+        doc_words = set()
+        for d in doc_ids:
+            doc_words.update(self.vectorizer.build_analyzer()(self.index[d].title))
+        similar_words = [w for w in similar_words if w in doc_words]
+        return similar_words[:top]
+
+    def _search_helper(self, query_embedding, category: str, sort_method: str, recency_sort: str, top: int) -> Tuple[List, List[str]]:
         n_query_embedding = query_embedding / (np.linalg.norm(query_embedding) + EPS)
         rankings = (1 - ENTROPY_FACTOR) * self.n_weighted_embeddings.dot(n_query_embedding) + ENTROPY_FACTOR * self.entropy
         if category in self.category_vectors:
@@ -143,7 +155,8 @@ class WeightedEmbeddingClusteringSearch:
                 rankings *= self.p_old_dates
         doc_ids = self._group_documents(rankings, sort_method)
         rocchios = self._compute_rocchio(query_embedding, doc_ids)
-        return self._format_results(doc_ids, rocchios)
+        words = self._explain_words(query_embedding, doc_ids)
+        return self._format_results(doc_ids, rocchios), words
 
     def search(self, query, category: str, sort_method: str="relevancy", recency_sort: str=None, top: int=10):
         query_weighted = self._compute_query_embedding(query)
