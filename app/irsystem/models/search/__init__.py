@@ -42,6 +42,12 @@ BANNED_SUBREDDITS = [
     'sweden',
     'ektenyheter',
     'norge',
+    'ntnu',
+    'newsokur',
+    'Iceland',
+    'todayilearned_jp',
+    'JuropijanSpeling',
+    'bybanen',
 ]
 
 TOKENIZATION_REGEX = re.compile(r"[a-z]+")

@@ -4,6 +4,7 @@ base = Blueprint('index', __name__, url_prefix='/',static_folder='static',templa
 
 @base.route('/', methods=['GET'])
 @base.route('/random', methods=['GET'])
+@base.route('/about', methods=['GET'])
 def index():
     return render_template('index.html')
 
