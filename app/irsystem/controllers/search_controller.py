@@ -24,7 +24,6 @@ def see_more():
     query = request.args.get('q', default=None)
     if query:
         query_vector = decode_numpy_array(query)
-        # TODO: implement category
         category = request.args.get('category', default=None)
         sort_method = request.args.get('sort', default="relevancy")
         recency_sort = request.args.get('recency', default=None)
