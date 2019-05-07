@@ -12,7 +12,7 @@ class Results extends Component {
           <Words
             words={this.props.words}
           />
-        {this.props.results.map(result => (
+        {this.props.results && this.props.results.map(result => (
           <FactCard
             key={result.permalink}
             title={result.title}

@@ -16,9 +16,8 @@ class QuerySearch extends React.Component {
     let params = new URLSearchParams(window.location.search);
     this.state = {
       query: params.get('q') || '',
-      results: [],
+      results: null,
       words: [],
-      failedQuery: null,
       advancedSearch: params.get("recency") !== null || params.get("sort") !== null,
       category: params.get("category"),
       recency: params.get("recency"),
@@ -71,7 +70,6 @@ class QuerySearch extends React.Component {
       this.setState({
         results: results,
         words: words,
-        failedQuery: results.length === 0 ? params.q : null
       });
     });
   }
@@ -96,7 +94,6 @@ class QuerySearch extends React.Component {
         this.setState({
           results: results,
           words: words,
-          failedQuery: null
         });
       });
     });
@@ -115,7 +112,6 @@ class QuerySearch extends React.Component {
       this.setState({
         results: results,
         words: words,
-        failedQuery: null
       });
     });
   }
@@ -157,8 +153,8 @@ class QuerySearch extends React.Component {
           </div>
         </form>
         <div className="mt-4">
-          {this.state.failedQuery !== null
-            ? <FailedResults query={this.state.failedQuery} />
+          {this.state.results !== null && this.state.results.length === 0
+            ? <FailedResults />
             : <Results results={this.state.results}
                        words={this.state.words}
                        seeMoreClicked={q => this.seeMore(q)} />
