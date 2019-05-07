@@ -162,7 +162,7 @@ class WeightedEmbeddingClusteringSearch:
         query_weighted = self._compute_query_embedding(query)
         # if we have no embeddings for the given query, we're out of luck
         if np.count_nonzero(query_weighted) == 0:
-            return []
+            return [], []
         return self._search_helper(query_weighted, category, sort_method, recency_sort, top)
 
     def see_more(self, query_embedding, category: str, sort_method: str="relevancy", recency_sort: str=None, top: int=10):
