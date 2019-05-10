@@ -11,6 +11,7 @@ class Results extends Component {
       <div className="results container">
           <Words
             words={this.props.words}
+            simTermSearched={this.props.simTermSearched}
           />
         {this.props.results && this.props.results.map(result => (
           <FactCard

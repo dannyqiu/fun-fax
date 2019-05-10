@@ -36,6 +36,7 @@ html, body {
   color: #6aaae5;
   padding: .6em;
   font-size: 85%;
+  cursor: pointer;
 }
 
 .words {

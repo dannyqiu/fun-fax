@@ -157,7 +157,8 @@ class QuerySearch extends React.Component {
             ? <FailedResults />
             : <Results results={this.state.results}
                        words={this.state.words}
-                       seeMoreClicked={q => this.seeMore(q)} />
+                       seeMoreClicked={q => this.seeMore(q)}
+                       simTermSearched={q => { this.setState({ query: q }, this.doSearch) }} />
           }
         </div>
     </div>

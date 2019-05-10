@@ -6,7 +6,10 @@ const Words = (props) => (
       <div className="words col-12">
         Considered Terms: &nbsp;
           {props.words.map(word => (
-          <span className="badge badge-info mr-2 mb-1">{word}</span>
+          <span className="badge badge-info mr-2 mb-1"
+                onClick={() => props.simTermSearched(word)}>
+            {word}
+          </span>
         ))}
       </div>
     </div>
