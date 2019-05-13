@@ -1,3 +1,5 @@
+limit_req_zone $binary_remote_addr zone=cslimit:10m rate=4r/s;
+
 server {
     listen 80;
     client_max_body_size 4G;
@@ -8,6 +10,7 @@ server {
     }
 
     location / {
+        limit_req zone=cslimit burst=8 nodelay;
         include proxy_params;
         proxy_pass http://unix:/tmp/cs.sock;
     }
