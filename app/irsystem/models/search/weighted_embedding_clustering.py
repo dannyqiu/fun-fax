@@ -174,9 +174,11 @@ class WeightedEmbeddingClusteringSearch:
         features = self.vectorizer.get_feature_names()
         words = set()
         for r, c in zip(*sample_tfidf_matrix.nonzero()):
-            if sample_tfidf_matrix[r, c] > np.random.random() or not words:
+            if sample_tfidf_matrix[r, c] > np.random.random():
                 words.add(features[c])
-        return self.search(" ".join(words), category, sort_method="popularity")
+        # select another random document if no words came up
+        results = self.search(" ".join(words), category, sort_method="popularity")
+        return results if results else self.random(category)
 
     def _format_results(self, doc_ids: List[int], rocchios):
         results = [
