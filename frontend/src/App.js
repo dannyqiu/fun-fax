@@ -6,17 +6,19 @@ import './App.css';
 class App extends Component {
   render() {
     return (
-      <div className="App">
+      <React.Fragment>
         <div className="nav">
           <Link to="/about"><i className="fas fa-info-circle"/> About</Link>
         </div>
-        <header className="App-header">
-          <h1 className="title">Fun Fax? Fun Fax.</h1>
-        </header>
-        <div className="torso">
-          <QuerySearch />
+        <div className="App">
+          <header className="App-header">
+            <h1 className="title">Fun Fax? Fun Fax.</h1>
+          </header>
+          <div className="torso">
+            <QuerySearch />
+          </div>
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }
