@@ -15,7 +15,7 @@ class About extends Component {
         <div className="about container">
           <div className="row">
             <div className="col-10 offset-1">
-              <p>Fun Fax is a project by Arshi Bhatnager, Ryan Davila, Rebecca Jiang, Nehal Rawat and Danny Qiu of Cornell University.</p> 
+              <p>Fun Fax is a project by Arshi Bhatnager, Ryan Davila, Rebecca Jiang, Danny Qiu, and Nehal Rawat of Cornell University.</p> 
               <p>We created this recommendation system for the final project of CS/INFO 4300, taught by Professor <a href="http://www.cs.cornell.edu/~cristian/">DNM</a>.</p>
               <p>Our code can be viewed on GitHub&nbsp;<a href="https://github.com/dannyqiu/fun-fax">here</a>.</p>
             </div>
