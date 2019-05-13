@@ -1,5 +1,3 @@
 [webservers]
-# v1
-35.243.202.157 ansible_ssh_user=ubuntu ansible_python_interpreter=/usr/bin/python3
-# v2
-35.231.115.91  ansible_ssh_user=ubuntu ansible_python_interpreter=/usr/bin/python3
+# final prototype
+137.116.117.176  ansible_ssh_user=ubuntu ansible_python_interpreter=/usr/bin/python3
