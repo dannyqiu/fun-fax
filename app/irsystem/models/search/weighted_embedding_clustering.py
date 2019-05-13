@@ -15,6 +15,7 @@ from ..category import CATEGORY_TERMS
 from ..thesaurus import Thesaurus
 from ..utils import normalize_range, encode_numpy_array
 
+EMBEDDING_DIMENSION = 300
 EPS = 1e-6
 ENTROPY_FACTOR = 0.125
 
@@ -48,7 +49,7 @@ class WeightedEmbeddingClusteringSearch:
         features = self.vectorizer.get_feature_names()
         self.f_vectors = np.array([self.nlp.vocab[f].vector for f in features])
         self.weighted_embeddings = tfidf_matrix.dot(self.f_vectors)
-        assert self.weighted_embeddings.shape == (len(title_data.index), 300)
+        assert self.weighted_embeddings.shape == (len(title_data.index), EMBEDDING_DIMENSION)
         self.n_weighted_embeddings = self.weighted_embeddings / (np.linalg.norm(self.weighted_embeddings, axis=1)[:, np.newaxis] + EPS)
 
         print("Computing documents entropy")
@@ -91,7 +92,11 @@ class WeightedEmbeddingClusteringSearch:
         else:
             # query was all stopwords, so we'll have to manually tokenize
             tokens = TOKENIZATION_REGEX.findall(query.lower())
-            query_weighted = np.average([self.nlp.vocab[t].vector for t in tokens], axis=0).flatten()
+            if tokens:
+                query_weighted = np.average([self.nlp.vocab[t].vector for t in tokens], axis=0).flatten()
+            else:
+                # query had no words, so give a zero vector
+                query_weighted = np.zeros(EMBEDDING_DIMENSION)
         return query_weighted
 
     def _group_documents(self, rankings, sort_method: str):
