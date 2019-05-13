@@ -18,7 +18,7 @@ class AdvancedSearch extends Component {
           <div className="sorting-area form-inline justify-content-center">
             <span className="mr-1">Recency preference:</span>
             <select name="recency"
-                    className="form-control form-control-sm mr-2"
+                    className="form-control form-control-sm mr-2 ml-2 ml-md-0"
                     value={this.props.recency || ''}
                     onChange={e => {this.props.recencyChanged(e.target.value === "" ? null : e.target.value)}}>
               <option value=""></option>
@@ -28,7 +28,7 @@ class AdvancedSearch extends Component {
 
             <span className="mr-1">Sort Preference:</span>
             <select name="sort"
-                    className="form-control form-control-sm"
+                    className="form-control form-control-sm ml-2 ml-md-0 mr-2 mr-md-0"
                     value={this.props.sort || ''}
                     onChange={e => {this.props.sortChanged(e.target.value)}}>
               <option value="relevancy">Relevancy</option>

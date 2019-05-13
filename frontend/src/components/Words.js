@@ -3,7 +3,7 @@ import React from 'react';
 const Words = (props) => (
   (props.words.length !== 0) && (
     <div className="row">
-      <div className="words col-12">
+      <div className="words col-12 mb-2">
         Considered Terms: &nbsp;
           {props.words.map(word => (
           <span key={word}

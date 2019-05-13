@@ -137,7 +137,7 @@ class QuerySearch extends React.Component {
             query={this.state.query}
             category={this.state.category}
             />
-          <div className="mb-3" />
+          <div className="mb-1" />
           <AdvancedSearch
             recencyChanged={v => this.setState({ recency: v })}
             sortChanged={v => this.setState({ sort: v })}

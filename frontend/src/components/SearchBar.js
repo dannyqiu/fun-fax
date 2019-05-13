@@ -5,7 +5,7 @@ class SearchBar extends Component {
   render() {
     return (
       <div className="form-inline justify-content-center mb-2">
-        <div className="input-group mr-2">
+        <div className="input-group mr-2 ml-2 mb-2">
           <div className="input-group-prepend">
             <span className="input-group-text" id="queryInput">
               <i className="fas fa-search" aria-hidden="true" />
@@ -22,7 +22,7 @@ class SearchBar extends Component {
                  autoComplete="off"
                  />
         </div>
-        <select className="selectpicker form-control"
+        <select className="selectpicker form-control mr-2 ml-2 ml-md-0 mb-2"
                 name="category"
                 value={this.props.category || ''}
                 onChange={e => {this.props.categoryChanged(e.target.value === "" ? null : e.target.value)}}
