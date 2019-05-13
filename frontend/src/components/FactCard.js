@@ -33,7 +33,7 @@ const FactCard = (props) => {
           <div className="col-2">
             <span className="fact-time">{props.time}</span>
             {props.thumbnail.startsWith("http") && (
-              <img className="fact-picture" src={props.thumbnail} alt={props.title} />
+              <img className="fact-picture" src={props.thumbnail.replace("http://", "https://")} alt={props.title} />
             )}
           </div>
         </div>
