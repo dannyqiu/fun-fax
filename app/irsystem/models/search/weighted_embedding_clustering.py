@@ -183,7 +183,7 @@ class WeightedEmbeddingClusteringSearch:
                 words.add(features[c])
         # select another random document if no words came up
         results = self.search(" ".join(words), category, sort_method="popularity")
-        return results if results else self.random(category)
+        return results if results[0] else self.random(category)
 
     def _format_results(self, doc_ids: List[int], rocchios):
         results = [
